@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "mcp__playwright__browser_resize",
+      "Bash(npx playwright:*)",
+      "Read(//c/Program Files/Google/Chrome/Application/**)",
+      "Read(//c/Users/dougl/AppData/Local/Google/Chrome/Application/**)",
+      "Read(//c/Users/dougl/AppData/Local/ms-playwright//**)",
+      "Bash(npx @playwright/mcp --help)",
+      "Bash(find /c/Users/dougl/GIT/pwv-dashboard/ -maxdepth 2 -name *.json)",
+      "Bash(mkdir -p \"/c/Users/dougl/AppData/Local/Google/Chrome/Application/\")",
+      "Bash(ln \"/c/Users/dougl/AppData/Local/ms-playwright/chromium-1208/chrome-win64/chrome.exe\" \"/c/Users/dougl/AppData/Local/Google/Chrome/Application/chrome.exe\")",
+      "Bash(mkdir:*)",
+      "Bash(node .playwright-mcp/capture.mjs)",
+      "Bash(npx --yes playwright@latest --version)",
+      "Bash(npm install:*)",
+      "Bash(grep -r \"ActivityDashboard\\\\|activity-dashboard\" /c/Users/dougl/GIT/pwv-dashboard/src --include=*.tsx -l)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(kill %1)",
+      "mcp__playwright__browser_click",
+      "mcp__ide__getDiagnostics",
+      "Bash(grep -r \"isComplete\\\\|complete\\\\|progress\" /c/Users/dougl/GIT/pwv-dashboard/src/components/*.tsx)"
+    ]
+  }
+}

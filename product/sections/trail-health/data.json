@@ -1,0 +1,243 @@
+{
+  "_meta": {
+    "models": {
+      "Trail": "A named Forest Service trail with computed health stats derived from patrol reports. Includes both list-view summary fields and full detail data.",
+      "PatrolEntry": "A single patrol visit to a trail — who patrolled, when, how many hikers they contacted, and how long they were out.",
+      "TreeSizeBreakdown": "Counts of fallen trees grouped by diameter class: small (<8\"), medium (8–15\"), large (16–23\"), xl (24–36\"), xxl (>36\").",
+      "ViolationCategory": "A rule violation type observed on this trail and the total count recorded.",
+      "MaintenanceWorkEntry": "A trail maintenance or clearing task performed during a patrol, typed by work category."
+    },
+    "relationships": [
+      "Each Trail has many PatrolEntries in its patrolHistory",
+      "Each Trail has treesDown and treesCleared counts broken down by size class",
+      "Each Trail has many ViolationCategory totals",
+      "Each Trail has many MaintenanceWorkEntries"
+    ]
+  },
+  "trails": [
+    {
+      "id": "greyrock",
+      "name": "Greyrock",
+      "trailNumber": 946,
+      "lengthMiles": 3.1,
+      "area": "Lower Poudre Canyon",
+      "difficulty": "hard",
+      "wilderness": false,
+      "patrolCount": 14,
+      "patrolFrequency": 3.5,
+      "hikersContacted": 412,
+      "efficiencyScore": 88,
+      "underPatrolled": false,
+      "patrolHistory": [
+        { "date": "2026-03-28", "memberName": "Sarah K.", "hikers": 67, "durationHours": 3.5 },
+        { "date": "2026-03-21", "memberName": "Tom R.", "hikers": 54, "durationHours": 4.0 },
+        { "date": "2026-03-14", "memberName": "Sarah K.", "hikers": 91, "durationHours": 3.0 },
+        { "date": "2026-03-07", "memberName": "Alex M.", "hikers": 44, "durationHours": 3.5 },
+        { "date": "2026-02-28", "memberName": "Tom R.", "hikers": 38, "durationHours": 4.0 },
+        { "date": "2026-02-21", "memberName": "Sarah K.", "hikers": 118, "durationHours": 3.5 }
+      ],
+      "treesDown": { "small": 3, "medium": 1, "large": 0, "xl": 0, "xxl": 0 },
+      "treesCleared": { "small": 3, "medium": 1, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Off-leash dog", "count": 8 },
+        { "category": "Group size exceeded", "count": 2 },
+        { "category": "Shortcutting / trail damage", "count": 1 }
+      ],
+      "maintenanceWork": [
+        { "date": "2026-03-21", "workType": "Brushing", "quantity": 40, "unit": "linear feet", "notes": "Cleared encroaching brush on upper switchbacks" },
+        { "date": "2026-02-28", "workType": "Drainage", "quantity": 3, "unit": "drain dips", "notes": "Cleared 3 blocked drain dips near summit approach" }
+      ]
+    },
+    {
+      "id": "hewlett-gulch",
+      "name": "Hewlett Gulch",
+      "trailNumber": 954,
+      "lengthMiles": 7.9,
+      "area": "Lower Poudre Canyon",
+      "difficulty": "moderate",
+      "wilderness": false,
+      "patrolCount": 11,
+      "patrolFrequency": 2.75,
+      "hikersContacted": 287,
+      "efficiencyScore": 74,
+      "underPatrolled": false,
+      "patrolHistory": [
+        { "date": "2026-03-26", "memberName": "Maria L.", "hikers": 32, "durationHours": 5.0 },
+        { "date": "2026-03-19", "memberName": "Dave S.", "hikers": 41, "durationHours": 4.5 },
+        { "date": "2026-03-12", "memberName": "Maria L.", "hikers": 28, "durationHours": 5.5 },
+        { "date": "2026-03-05", "memberName": "Chris P.", "hikers": 55, "durationHours": 4.0 },
+        { "date": "2026-02-26", "memberName": "Dave S.", "hikers": 23, "durationHours": 5.0 }
+      ],
+      "treesDown": { "small": 5, "medium": 3, "large": 1, "xl": 0, "xxl": 0 },
+      "treesCleared": { "small": 5, "medium": 3, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Off-leash dog", "count": 5 },
+        { "category": "Camping outside designated site", "count": 3 },
+        { "category": "Fire in restricted area", "count": 1 }
+      ],
+      "maintenanceWork": [
+        { "date": "2026-03-19", "workType": "Limbing", "quantity": 120, "unit": "linear feet", "notes": "Limbed overhanging branches on lower segment" },
+        { "date": "2026-03-05", "workType": "Tread repair", "quantity": 15, "unit": "linear feet", "notes": "Repaired eroded tread at creek crossing" },
+        { "date": "2026-02-26", "workType": "Drainage", "quantity": 2, "unit": "drain dips", "notes": "" }
+      ]
+    },
+    {
+      "id": "young-gulch",
+      "name": "Young Gulch",
+      "trailNumber": 999,
+      "lengthMiles": 4.9,
+      "area": "Lower Poudre Canyon",
+      "difficulty": "moderate",
+      "wilderness": false,
+      "patrolCount": 4,
+      "patrolFrequency": 1.0,
+      "hikersContacted": 89,
+      "efficiencyScore": 38,
+      "underPatrolled": true,
+      "patrolHistory": [
+        { "date": "2026-03-22", "memberName": "Alex M.", "hikers": 27, "durationHours": 3.5 },
+        { "date": "2026-02-15", "memberName": "Tom R.", "hikers": 34, "durationHours": 4.0 },
+        { "date": "2026-01-18", "memberName": "Alex M.", "hikers": 18, "durationHours": 3.5 },
+        { "date": "2025-12-14", "memberName": "Sarah K.", "hikers": 10, "durationHours": 3.0 }
+      ],
+      "treesDown": { "small": 7, "medium": 4, "large": 2, "xl": 1, "xxl": 0 },
+      "treesCleared": { "small": 5, "medium": 2, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Off-leash dog", "count": 4 },
+        { "category": "Prohibited equipment (e-bike)", "count": 2 }
+      ],
+      "maintenanceWork": []
+    },
+    {
+      "id": "lion-gulch",
+      "name": "Lion Gulch",
+      "trailNumber": 949,
+      "lengthMiles": 3.4,
+      "area": "Big Thompson/Estes Park",
+      "difficulty": "moderate",
+      "wilderness": false,
+      "patrolCount": 8,
+      "patrolFrequency": 2.0,
+      "hikersContacted": 198,
+      "efficiencyScore": 61,
+      "underPatrolled": false,
+      "patrolHistory": [
+        { "date": "2026-03-25", "memberName": "Jordan B.", "hikers": 44, "durationHours": 3.0 },
+        { "date": "2026-03-11", "memberName": "Jordan B.", "hikers": 37, "durationHours": 3.0 },
+        { "date": "2026-02-25", "memberName": "Rachel W.", "hikers": 52, "durationHours": 3.5 },
+        { "date": "2026-02-11", "memberName": "Jordan B.", "hikers": 65, "durationHours": 2.5 }
+      ],
+      "treesDown": { "small": 2, "medium": 0, "large": 0, "xl": 0, "xxl": 0 },
+      "treesCleared": { "small": 2, "medium": 0, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Off-leash dog", "count": 11 },
+        { "category": "Camping outside designated site", "count": 1 }
+      ],
+      "maintenanceWork": [
+        { "date": "2026-03-25", "workType": "Sign work", "quantity": 1, "unit": "sign", "notes": "Replaced missing trailhead marker at upper junction" }
+      ]
+    },
+    {
+      "id": "beaver-creek",
+      "name": "Beaver Creek",
+      "trailNumber": 942,
+      "lengthMiles": 6.6,
+      "area": "Upper Poudre Canyon",
+      "difficulty": "hard",
+      "wilderness": true,
+      "patrolCount": 5,
+      "patrolFrequency": 1.25,
+      "hikersContacted": 42,
+      "efficiencyScore": 71,
+      "underPatrolled": false,
+      "patrolHistory": [
+        { "date": "2026-03-20", "memberName": "Pat N.", "hikers": 9, "durationHours": 6.0 },
+        { "date": "2026-02-20", "memberName": "Sam T.", "hikers": 14, "durationHours": 6.5 },
+        { "date": "2026-01-23", "memberName": "Pat N.", "hikers": 8, "durationHours": 6.0 },
+        { "date": "2025-12-19", "memberName": "Sam T.", "hikers": 7, "durationHours": 7.0 },
+        { "date": "2025-11-21", "memberName": "Pat N.", "hikers": 4, "durationHours": 5.5 }
+      ],
+      "treesDown": { "small": 4, "medium": 6, "large": 3, "xl": 1, "xxl": 0 },
+      "treesCleared": { "small": 4, "medium": 4, "large": 1, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Camping outside designated site", "count": 2 },
+        { "category": "Fire in restricted area", "count": 1 }
+      ],
+      "maintenanceWork": [
+        { "date": "2026-02-20", "workType": "Limbing", "quantity": 80, "unit": "linear feet", "notes": "Cleared limbs downed by winter wind on ridge section" },
+        { "date": "2026-01-23", "workType": "Weed management", "quantity": 30, "unit": "linear feet", "notes": "Pulled invasive thistle along creek bank" }
+      ]
+    },
+    {
+      "id": "emmaline-lake",
+      "name": "Emmaline Lake",
+      "trailNumber": 945,
+      "lengthMiles": 5.8,
+      "area": "Pingree Park",
+      "difficulty": "hard",
+      "wilderness": true,
+      "patrolCount": 2,
+      "patrolFrequency": 0.5,
+      "hikersContacted": 19,
+      "efficiencyScore": 29,
+      "underPatrolled": true,
+      "patrolHistory": [
+        { "date": "2026-02-08", "memberName": "Chris P.", "hikers": 11, "durationHours": 7.0 },
+        { "date": "2025-11-02", "memberName": "Maria L.", "hikers": 8, "durationHours": 7.5 }
+      ],
+      "treesDown": { "small": 2, "medium": 3, "large": 2, "xl": 2, "xxl": 1 },
+      "treesCleared": { "small": 2, "medium": 1, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [],
+      "maintenanceWork": []
+    },
+    {
+      "id": "mummy-pass",
+      "name": "Mummy Pass",
+      "trailNumber": 937,
+      "lengthMiles": 3.5,
+      "area": "Pingree Park",
+      "difficulty": "hard",
+      "wilderness": true,
+      "patrolCount": 3,
+      "patrolFrequency": 0.75,
+      "hikersContacted": 11,
+      "efficiencyScore": 52,
+      "underPatrolled": true,
+      "patrolHistory": [
+        { "date": "2026-03-01", "memberName": "Sam T.", "hikers": 5, "durationHours": 5.5 },
+        { "date": "2026-01-04", "memberName": "Pat N.", "hikers": 4, "durationHours": 5.0 },
+        { "date": "2025-11-09", "memberName": "Sam T.", "hikers": 2, "durationHours": 5.5 }
+      ],
+      "treesDown": { "small": 1, "medium": 2, "large": 1, "xl": 0, "xxl": 0 },
+      "treesCleared": { "small": 1, "medium": 1, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [
+        { "category": "Camping outside designated site", "count": 1 }
+      ],
+      "maintenanceWork": [
+        { "date": "2026-03-01", "workType": "Drainage", "quantity": 1, "unit": "drain dip", "notes": "Cleared blocked drain dip at switchback near treeline" }
+      ]
+    },
+    {
+      "id": "signal-mountain",
+      "name": "Signal Mountain",
+      "trailNumber": 928,
+      "lengthMiles": 5.9,
+      "area": "Upper Poudre Canyon",
+      "difficulty": "hard",
+      "wilderness": true,
+      "patrolCount": 2,
+      "patrolFrequency": 0.5,
+      "hikersContacted": 6,
+      "efficiencyScore": 33,
+      "underPatrolled": true,
+      "patrolHistory": [
+        { "date": "2026-03-14", "memberName": "Rachel W.", "hikers": 4, "durationHours": 6.5 },
+        { "date": "2025-12-06", "memberName": "Pat N.", "hikers": 2, "durationHours": 6.0 }
+      ],
+      "treesDown": { "small": 3, "medium": 5, "large": 4, "xl": 2, "xxl": 1 },
+      "treesCleared": { "small": 2, "medium": 2, "large": 0, "xl": 0, "xxl": 0 },
+      "violationsByCategory": [],
+      "maintenanceWork": []
+    }
+  ]
+}

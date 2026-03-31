@@ -1,0 +1,22 @@
+# Apache config copied into dist/ on `vite build` (files in public/ are emitted at site root).
+# Requires: AllowOverride FileInfo (or equivalent) and mod_rewrite enabled.
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve existing files and directories as-is (assets, index.html, etc.)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Client-side routing: all other requests go to the SPA shell
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# Optional: short cache for HTML (hashed JS/CSS in /assets/ are safe to cache longer via defaults)
+<IfModule mod_headers.c>
+  <FilesMatch "index\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
