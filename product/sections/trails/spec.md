@@ -1,4 +1,4 @@
-# Trail Health Specification
+# Trails Specification
 
 ## Overview
 A per-trail view of patrol coverage and condition data across all trails in the Canyon Lakes Ranger District. Users can browse and filter the full trail list, sort by patrol efficiency score, and drill into individual trail detail pages to review patrol history, tree clearing, violations, and maintenance work.

@@ -19,8 +19,17 @@ import { PatrolActivityChart } from './PatrolActivityChart'
 import { TrailCoverageList } from './TrailCoverageList'
 import { ViolationsChart } from './ViolationsChart'
 import { TreesClearedChart } from './TreesClearedChart'
+import { MembersByAgeChart } from './MembersByAgeChart'
 
 // ─── Time range config ──────────────────────────────────────────────────────
+
+const ACTIVE_LABEL: Record<TimeRange, string> = {
+  '7d':  'Active this week',
+  '1m':  'Active this month',
+  '3m':  'Active this quarter',
+  '1y':  'Active this year',
+  'all': 'Active (all time)',
+}
 
 const TIME_RANGES: { value: TimeRange; label: string }[] = [
   { value: '7d',  label: 'Last 7 Days' },
@@ -233,6 +242,7 @@ export function ActivityDashboard({
   trailCoverage,
   violationsByCategory,
   treesCleared,
+  membersByAge,
   members,
   currentUserId,
   onTimeRangeChange,
@@ -321,8 +331,21 @@ export function ActivityDashboard({
         <PatrolActivityChart data={patrolActivity} />
       </ChartCard>
 
+      {/* ── Trees Cleared + Members by Age ────────────────────────── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+        <ChartCard title="Trees Cleared by Size Class">
+          <TreesClearedChart data={treesCleared} />
+        </ChartCard>
+        <ChartCard title="Members by Age">
+          <MembersByAgeChart
+            data={membersByAge}
+            activeLabel={ACTIVE_LABEL[scope.timeRange]}
+          />
+        </ChartCard>
+      </div>
+
       {/* ── Two-column: Trail Coverage + Violations ────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
         <ChartCard title="Trail Coverage" className="lg:col-span-3">
           <TrailCoverageList
             data={trailCoverage}
@@ -334,11 +357,6 @@ export function ActivityDashboard({
           <ViolationsChart data={violationsByCategory} />
         </ChartCard>
       </div>
-
-      {/* ── Trees Cleared (full width) ─────────────────────────────── */}
-      <ChartCard title="Trees Cleared by Size Class">
-        <TreesClearedChart data={treesCleared} />
-      </ChartCard>
 
     </div>
   )

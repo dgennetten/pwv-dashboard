@@ -1,5 +1,5 @@
 import { ArrowLeft, Leaf, AlertTriangle, Footprints, PersonStanding, Lock } from 'lucide-react'
-import type { Trail, Difficulty, TreeSizeBreakdown } from '@/../product/sections/trail-health/types'
+import type { Trail, Difficulty, TreeSizeBreakdown } from '@/../product/sections/trails/types'
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -353,7 +353,7 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
         className="flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-colors mb-5 group"
       >
         <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-        Trail Health
+        Trails
       </button>
 
       {/* Trail header */}

@@ -203,6 +203,15 @@
     ]
   },
 
+  "membersByAge": [
+    { "ageGroup": "20–29", "active": 3,  "inactive": 12 },
+    { "ageGroup": "30–39", "active": 8,  "inactive": 18 },
+    { "ageGroup": "40–49", "active": 14, "inactive": 32 },
+    { "ageGroup": "50–59", "active": 22, "inactive": 45 },
+    { "ageGroup": "60–69", "active": 18, "inactive": 52 },
+    { "ageGroup": "70+",   "active": 7,  "inactive": 31 }
+  ],
+
   "members": [
     { "personId": 1042, "firstName": "Sarah", "lastName": "Mitchell", "fullName": "Sarah Mitchell", "patrols": 47 },
     { "personId": 2187, "firstName": "Tom", "lastName": "Eriksen", "fullName": "Tom Eriksen", "patrols": 63 },

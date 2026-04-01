@@ -6,6 +6,7 @@ import type {
   TimeRange,
   MemberContext,
   TreesCleared,
+  MemberAgeGroup,
 } from '@/../product/sections/activity-dashboard/types'
 
 const PERIOD_LABELS: Record<string, string> = {
@@ -42,6 +43,7 @@ export default function ActivityDashboardPreview() {
       trailCoverage={data.trailCoverage}
       violationsByCategory={data.violationsByCategory}
       treesCleared={data.treesCleared as unknown as TreesCleared}
+      membersByAge={data.membersByAge as MemberAgeGroup[]}
       members={data.members}
       currentUserId={data.currentUserId}
       onTimeRangeChange={handleTimeRangeChange}

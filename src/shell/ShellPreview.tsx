@@ -12,7 +12,7 @@ const CONTENT_SAMPLES: Record<string, { title: string; subtitle: string }> = {
     subtitle: 'Last 7 days · All Members',
   },
   '/trails': {
-    title: 'Trail Health',
+    title: 'Trails',
     subtitle: '56 trails · Canyon Lakes RD',
   },
   '/leaderboards': {

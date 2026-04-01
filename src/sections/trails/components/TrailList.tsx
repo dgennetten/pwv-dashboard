@@ -6,10 +6,13 @@ import {
   AlertTriangle,
   Leaf,
   SlidersHorizontal,
+  Search,
+  TreePine,
+  Clock,
 } from 'lucide-react'
-import type { Trail, Difficulty } from '@/../product/sections/trail-health/types'
+import type { Trail, Difficulty } from '@/../product/sections/trails/types'
 
-type SortKey = 'efficiencyScore' | 'patrolCount'
+type SortKey = 'efficiencyScore' | 'patrolCount' | 'lastPatrolled'
 type SortDir = 'asc' | 'desc'
 
 const AREAS = [
@@ -17,9 +20,34 @@ const AREAS = [
   'Upper Poudre Canyon',
   'Big Thompson/Estes Park',
   'Pingree Park',
+  'Red Feather Lakes',
+  'Rawah Wilderness',
+  'Pawnee Buttes',
 ]
 
 const DIFFICULTIES: Difficulty[] = ['easy', 'moderate', 'hard']
+
+// ── Derived trail stats ──────────────────────────────────────────────────────
+
+function getLastPatrolDate(trail: Trail): string | null {
+  return trail.patrolHistory[0]?.date ?? null
+}
+
+function getDaysSincePatrol(trail: Trail): number | null {
+  const last = getLastPatrolDate(trail)
+  if (!last) return null
+  const diff = Date.now() - new Date(last).getTime()
+  return Math.floor(diff / (1000 * 60 * 60 * 24))
+}
+
+function getTreesOutstanding(trail: Trail): number {
+  const keys = ['small', 'medium', 'large', 'xl', 'xxl'] as const
+  return keys.reduce((sum, k) => sum + Math.max(0, trail.treesDown[k] - trail.treesCleared[k]), 0)
+}
+
+function formatLastPatrol(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+}
 
 // ── Efficiency score badge ───────────────────────────────────────────────────
 
@@ -121,6 +149,7 @@ interface TrailListProps {
 }
 
 export function TrailList({ trails, onSelectTrail }: TrailListProps) {
+  const [search, setSearch] = useState('')
   const [filterArea, setFilterArea] = useState<string>('all')
   const [filterDifficulty, setFilterDifficulty] = useState<string>('all')
   const [filterWilderness, setFilterWilderness] = useState(false)
@@ -133,48 +162,78 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
       setSortDir(prev => (prev === 'desc' ? 'asc' : 'desc'))
     } else {
       setSortKey(key)
-      setSortDir('desc')
+      // For lastPatrolled, default to asc so most-neglected trails appear first
+      setSortDir(key === 'lastPatrolled' ? 'asc' : 'desc')
     }
   }
 
   const filtered = useMemo(() => {
     let result = [...trails]
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(t =>
+        t.name.toLowerCase().includes(q) || String(t.trailNumber).includes(q)
+      )
+    }
     if (filterArea !== 'all') result = result.filter(t => t.area === filterArea)
     if (filterDifficulty !== 'all') result = result.filter(t => t.difficulty === filterDifficulty)
     if (filterWilderness) result = result.filter(t => t.wilderness)
     if (filterUnderPatrolled) result = result.filter(t => t.underPatrolled)
     result.sort((a, b) => {
+      if (sortKey === 'lastPatrolled') {
+        const aDate = getLastPatrolDate(a) ?? '0000-00-00'
+        const bDate = getLastPatrolDate(b) ?? '0000-00-00'
+        const diff = aDate < bDate ? -1 : aDate > bDate ? 1 : 0
+        return sortDir === 'desc' ? -diff : diff
+      }
       const diff = a[sortKey] - b[sortKey]
       return sortDir === 'desc' ? -diff : diff
     })
     return result
-  }, [trails, filterArea, filterDifficulty, filterWilderness, filterUnderPatrolled, sortKey, sortDir])
+  }, [trails, search, filterArea, filterDifficulty, filterWilderness, filterUnderPatrolled, sortKey, sortDir])
 
   const underPatrolledCount = trails.filter(t => t.underPatrolled).length
 
   return (
-    <div className="min-h-full bg-stone-50 dark:bg-stone-950 p-4 md:p-6 lg:p-8">
+    <div className="min-h-full bg-stone-50 dark:bg-stone-950">
 
-      {/* Page header */}
-      <div className="mb-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Trail Health</h2>
-          {underPatrolledCount > 0 && (
-            <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-full">
-              <AlertTriangle className="w-3 h-3" />
-              {underPatrolledCount} under-patrolled
-            </span>
-          )}
+      {/* ── Sticky header + filter bar ─────────────────────────────────────── */}
+      <div className="sticky top-0 z-10 bg-stone-50 dark:bg-stone-950 px-4 md:px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8 pb-3 shadow-[0_1px_0_0] shadow-stone-200 dark:shadow-stone-800">
+
+        {/* Page header */}
+        <div className="mb-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Trails</h2>
+            {underPatrolledCount > 0 && (
+              <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-full">
+                <AlertTriangle className="w-3 h-3" />
+                {underPatrolledCount} under-patrolled
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-stone-400 dark:text-stone-500 mt-0.5">
+            {filtered.length === trails.length
+              ? `${trails.length} trails`
+              : `${filtered.length} of ${trails.length} trails`}
+          </p>
         </div>
-        <p className="text-sm text-stone-400 dark:text-stone-500 mt-0.5">
-          {filtered.length === trails.length
-            ? `${trails.length} trails`
-            : `${filtered.length} of ${trails.length} trails`}
-        </p>
-      </div>
 
-      {/* Filter bar */}
-      <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-3 py-2.5 mb-4">
+        {/* Search + filter bar */}
+        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-3 py-2.5 space-y-2">
+
+        {/* Search row */}
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 dark:text-stone-500 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search by name or trail #…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg text-stone-700 dark:text-stone-300 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 transition-colors"
+          />
+        </div>
+
+        {/* Filter row */}
         <div className="flex flex-wrap items-center gap-2">
           <SlidersHorizontal className="w-3.5 h-3.5 text-stone-400 dark:text-stone-500 shrink-0" />
 
@@ -227,7 +286,11 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
             activeClass="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700"
           />
         </div>
-      </div>
+        </div>
+      </div>{/* end sticky */}
+
+      {/* ── Scrolling content ──────────────────────────────────────────────── */}
+      <div className="px-4 md:px-6 lg:px-8 pt-4 pb-4 md:pb-6 lg:pb-8">
 
       {/* Trail table */}
       <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl overflow-hidden">
@@ -256,9 +319,9 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
                   </SortButton>
                 </th>
                 <th className="px-4 py-3 text-right hidden md:table-cell">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                    / mo
-                  </span>
+                  <SortButton sortKey="lastPatrolled" currentKey={sortKey} currentDir={sortDir} onSort={handleSort}>
+                    Last Patrol
+                  </SortButton>
                 </th>
                 <th className="px-4 py-3 text-right">
                   <SortButton sortKey="efficiencyScore" currentKey={sortKey} currentDir={sortDir} onSort={handleSort}>
@@ -268,72 +331,100 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-stone-100 dark:divide-stone-800">
-              {filtered.map(trail => (
-                <tr
-                  key={trail.id}
-                  onClick={() => onSelectTrail?.(trail.id)}
-                  className={`cursor-pointer transition-colors group ${
-                    trail.underPatrolled
-                      ? 'hover:bg-amber-50/60 dark:hover:bg-amber-900/10'
-                      : 'hover:bg-stone-50 dark:hover:bg-stone-800/60'
-                  }`}
-                >
-                  {/* Trail name */}
-                  <td className="px-4 py-3">
-                    <div className="flex items-start gap-2">
-                      <div>
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="font-medium text-stone-900 dark:text-stone-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
-                            {trail.name}
-                          </span>
-                          {trail.wilderness && (
-                            <span className="inline-flex shrink-0" title="Wilderness">
-                              <Leaf className="w-3 h-3 text-emerald-500 dark:text-emerald-400" aria-hidden />
+              {filtered.map(trail => {
+                const treesOut = getTreesOutstanding(trail)
+                const days = getDaysSincePatrol(trail)
+                const lastDate = getLastPatrolDate(trail)
+                const isStale = days !== null && days > 30
+
+                return (
+                  <tr
+                    key={trail.id}
+                    onClick={() => onSelectTrail?.(trail.id)}
+                    className={`cursor-pointer transition-colors group ${
+                      trail.underPatrolled
+                        ? 'hover:bg-amber-50/60 dark:hover:bg-amber-900/10'
+                        : 'hover:bg-stone-50 dark:hover:bg-stone-800/60'
+                    }`}
+                  >
+                    {/* Trail name */}
+                    <td className="px-4 py-3">
+                      <div className="flex items-start gap-2">
+                        <div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-medium text-stone-900 dark:text-stone-100 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition-colors">
+                              {trail.name}
                             </span>
-                          )}
-                          {trail.underPatrolled && (
-                            <span className="inline-flex shrink-0" title="Under-patrolled">
-                              <AlertTriangle className="w-3 h-3 text-amber-500 dark:text-amber-400" aria-hidden />
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-xs text-stone-400 dark:text-stone-500 mt-0.5">
-                          #{trail.trailNumber} · {trail.lengthMiles} mi
+                            {trail.wilderness && (
+                              <span className="inline-flex shrink-0" title="Wilderness">
+                                <Leaf className="w-3 h-3 text-emerald-500 dark:text-emerald-400" aria-hidden />
+                              </span>
+                            )}
+                            {trail.underPatrolled && (
+                              <span className="inline-flex shrink-0" title="Under-patrolled">
+                                <AlertTriangle className="w-3 h-3 text-amber-500 dark:text-amber-400" aria-hidden />
+                              </span>
+                            )}
+                            {treesOut > 0 && (
+                              <span
+                                className="inline-flex items-center gap-0.5 text-xs font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800 px-1.5 py-0.5 rounded shrink-0"
+                                title={`${treesOut} uncleared tree${treesOut > 1 ? 's' : ''}`}
+                              >
+                                <TreePine className="w-2.5 h-2.5" />
+                                {treesOut}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-xs text-stone-400 dark:text-stone-500 mt-0.5">
+                            #{trail.trailNumber} · {trail.lengthMiles} mi
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
 
-                  {/* Area */}
-                  <td className="px-4 py-3 hidden lg:table-cell">
-                    <span className="text-xs text-stone-500 dark:text-stone-400">{trail.area}</span>
-                  </td>
+                    {/* Area */}
+                    <td className="px-4 py-3 hidden lg:table-cell">
+                      <span className="text-xs text-stone-500 dark:text-stone-400">{trail.area}</span>
+                    </td>
 
-                  {/* Difficulty */}
-                  <td className="px-4 py-3 hidden sm:table-cell">
-                    <DifficultyLabel difficulty={trail.difficulty} />
-                  </td>
+                    {/* Difficulty */}
+                    <td className="px-4 py-3 hidden sm:table-cell">
+                      <DifficultyLabel difficulty={trail.difficulty} />
+                    </td>
 
-                  {/* Patrol count */}
-                  <td className="px-4 py-3 text-right">
-                    <span className="font-semibold tabular-nums text-stone-800 dark:text-stone-200">
-                      {trail.patrolCount}
-                    </span>
-                  </td>
+                    {/* Patrol count */}
+                    <td className="px-4 py-3 text-right">
+                      <span className="font-semibold tabular-nums text-stone-800 dark:text-stone-200">
+                        {trail.patrolCount}
+                      </span>
+                    </td>
 
-                  {/* Frequency */}
-                  <td className="px-4 py-3 text-right hidden md:table-cell">
-                    <span className="text-xs tabular-nums text-stone-400 dark:text-stone-500">
-                      {trail.patrolFrequency.toFixed(1)}
-                    </span>
-                  </td>
+                    {/* Last patrol */}
+                    <td className="px-4 py-3 text-right hidden md:table-cell">
+                      {lastDate ? (
+                        <div>
+                          <span className={`text-xs tabular-nums ${isStale ? 'text-red-500 dark:text-red-400 font-medium' : 'text-stone-500 dark:text-stone-400'}`}>
+                            {formatLastPatrol(lastDate)}
+                          </span>
+                          {isStale && days !== null && (
+                            <div className="flex items-center justify-end gap-0.5 mt-0.5 text-red-400 dark:text-red-500">
+                              <Clock className="w-2.5 h-2.5" />
+                              <span className="text-xs tabular-nums">{days}d ago</span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <span className="text-xs text-stone-400 dark:text-stone-500">Never</span>
+                      )}
+                    </td>
 
-                  {/* Score */}
-                  <td className="px-4 py-3 text-right">
-                    <EfficiencyBadge score={trail.efficiencyScore} />
-                  </td>
-                </tr>
-              ))}
+                    {/* Score */}
+                    <td className="px-4 py-3 text-right">
+                      <EfficiencyBadge score={trail.efficiencyScore} />
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
 
@@ -346,12 +437,15 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
       </div>
 
       {/* Legend */}
-      <div className="mt-3 flex items-center gap-4 text-xs text-stone-400 dark:text-stone-500">
+      <div className="mt-3 flex flex-wrap items-center gap-4 text-xs text-stone-400 dark:text-stone-500">
         <span className="flex items-center gap-1">
           <Leaf className="w-3 h-3 text-emerald-500" /> Wilderness designated
         </span>
         <span className="flex items-center gap-1">
           <AlertTriangle className="w-3 h-3 text-amber-500" /> Needs more coverage
+        </span>
+        <span className="flex items-center gap-1">
+          <TreePine className="w-3 h-3 text-orange-500" /> Uncleared trees
         </span>
         <span className="flex items-center gap-1">
           Score:
@@ -360,6 +454,8 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
           <span className="font-semibold text-red-500">&lt;50</span> low
         </span>
       </div>
+
+      </div>{/* end scrolling content */}
     </div>
   )
 }

@@ -84,6 +84,14 @@ export interface TreesCleared {
   byTrail: TrailTreesCleared[]
 }
 
+// ─── Member age histogram ─────────────────────────────────────────────────────
+
+export interface MemberAgeGroup {
+  ageGroup: string   // e.g. "20–29", "70+"
+  active: number     // active within the selected time range
+  inactive: number   // not active within the selected time range
+}
+
 // ─── Member selector ──────────────────────────────────────────────────────────
 
 export interface MemberOption {
@@ -105,6 +113,8 @@ export interface ActivityDashboardProps {
   violationsByCategory: ViolationCategory[]
   treesCleared: TreesCleared
   members: MemberOption[]
+  membersByAge: MemberAgeGroup[]
+
   /** PersonID of the logged-in user; enables the "Me" shortcut in the member selector. Omit for public/unauthenticated view. */
   currentUserId?: number
 

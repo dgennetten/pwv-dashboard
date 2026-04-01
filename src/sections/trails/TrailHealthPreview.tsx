@@ -1,5 +1,5 @@
-import data from '@/../product/sections/trail-health/data.json'
-import type { Trail } from '@/../product/sections/trail-health/types'
+import data from '@/../product/sections/trails/data.json'
+import type { Trail } from '@/../product/sections/trails/types'
 import { TrailHealth } from './components/TrailHealth'
 
 export default function TrailHealthPreview() {

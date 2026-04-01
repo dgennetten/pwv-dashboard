@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { TrailHealthProps } from '@/../product/sections/trail-health/types'
+import type { TrailHealthProps } from '@/../product/sections/trails/types'
 import { TrailList } from './TrailList'
 import { TrailDetail } from './TrailDetail'
 

@@ -16,7 +16,7 @@ interface MainNavProps {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Activity Dashboard', href: '/dashboard', icon: LayoutDashboard, group: 'main' },
-  { label: 'Trail Health', href: '/trails', icon: Map, group: 'main' },
+  { label: 'Trails', href: '/trails', icon: Map, group: 'main' },
   { label: 'Leaderboards & Trends', href: '/leaderboards', icon: Trophy, group: 'main' },
   { label: 'Admin', href: '/admin', icon: BarChart3, group: 'admin' },
   { label: 'Settings', href: '/settings', icon: Settings, group: 'utility' },

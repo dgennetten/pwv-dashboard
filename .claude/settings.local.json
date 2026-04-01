@@ -23,7 +23,12 @@
       "Bash(kill %1)",
       "mcp__playwright__browser_click",
       "mcp__ide__getDiagnostics",
-      "Bash(grep -r \"isComplete\\\\|complete\\\\|progress\" /c/Users/dougl/GIT/pwv-dashboard/src/components/*.tsx)"
+      "Bash(grep -r \"isComplete\\\\|complete\\\\|progress\" /c/Users/dougl/GIT/pwv-dashboard/src/components/*.tsx)",
+      "Bash(git mv:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node -e \"const d = require\\(''./product/sections/trails/data.json''\\); console.log\\(''Trail count:'', d.trails.length\\)\")"
     ]
   }
 }
