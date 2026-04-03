@@ -221,33 +221,34 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
         {/* Search + filter bar */}
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl px-3 py-2.5 space-y-2">
 
-        {/* Search row */}
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 dark:text-stone-500 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search by name or trail #…"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg text-stone-700 dark:text-stone-300 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 transition-colors"
-          />
-        </div>
-
-        {/* Filter row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-stone-400 dark:text-stone-500 shrink-0" />
-
-          {/* Area */}
+        {/* Search + area on one row */}
+        <div className="flex flex-row gap-2 items-center">
+          <div className="relative flex-1 min-w-0">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 dark:text-stone-500 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search by name or trail #…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-8 pr-3 py-1.5 text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg text-stone-700 dark:text-stone-300 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 transition-colors"
+            />
+          </div>
           <select
             value={filterArea}
             onChange={e => setFilterArea(e.target.value)}
-            className="text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg px-2.5 py-1.5 text-stone-700 dark:text-stone-300 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 transition-colors"
+            aria-label="Filter by area"
+            className="shrink-0 w-[min(100%,11rem)] sm:w-44 text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-lg px-2.5 py-1.5 text-stone-700 dark:text-stone-300 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 transition-colors"
           >
             <option value="all">All Areas</option>
             {AREAS.map(a => (
               <option key={a} value={a}>{a}</option>
             ))}
           </select>
+        </div>
+
+        {/* Filter row */}
+        <div className="flex flex-wrap items-center gap-2">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-stone-400 dark:text-stone-500 shrink-0" />
 
           {/* Difficulty pills */}
           <div className="flex gap-1">
