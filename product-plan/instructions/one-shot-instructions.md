@@ -123,11 +123,11 @@ Primary **patrol activity snapshot** — org-wide or per-member, with time range
 From `product-plan/sections/activity-dashboard/components/`:
 
 - `ActivityDashboard.tsx` — composition + scope controls
-- `PatrolActivityChart`, `TrailCoverageList`, `ViolationsChart`, `TreesClearedChart`, `MembersByAgeChart`
+- `PatrolActivityChart`, `TrailCoverageList`, `TrailCoveragePatrolDetail`, `ViolationsChart`, `TreesClearedChart`, `MembersByAgeChart`
 
 ## Props (`ActivityDashboardProps`)
 
-**Data:** `scope`, `summary`, `patrolActivity`, `trailCoverage`, `violationsByCategory`, `treesCleared`, `members`, `membersByAge`, optional `currentUserId`
+**Data:** `scope`, `summary`, `patrolActivity`, `trailCoverage`, `patrolsByTrailId`, `violationsByCategory`, `treesCleared`, `members`, `membersByAge`, optional `currentUserId`
 
 **Callbacks:** `onTimeRangeChange`, `onMemberChange`, `onTrailSelect`, `onTrailCoverageSortChange`
 

@@ -4,6 +4,7 @@
       "summary": "Headline KPI stats for the selected time range and member scope. All numbers represent totals within the filtered period.",
       "patrolActivity": "Day-by-day patrol counts within the selected time range. Used to render the patrol activity bar chart.",
       "trailCoverage": "Per-trail patrol summary for the selected period. Each record represents one trail and shows patrol frequency, member participation, and hiker contact totals.",
+      "patrolsByTrailId": "Patrol rows keyed by trail ID for the coverage drill-down view; must match the same time range and member scope as the dashboard.",
       "violationsByCategory": "Aggregated violation counts grouped by violation type. Sourced from t_rpt_violation joined to lu_obs_type.",
       "treesCleared": "Trees cleared during patrol, broken down by size class. Includes both an org-wide aggregate and a per-trail breakdown.",
       "members": "Member list used to populate the member selector dropdown. Only includes active members with at least one patrol in the database.",
@@ -145,6 +146,39 @@
       "lastPatrolDate": "2026-03-24"
     }
   ],
+
+  "patrolsByTrailId": {
+    "117": [
+      { "date": "2026-03-29", "memberName": "Sarah Mitchell", "hikers": 32, "durationHours": 4.5 },
+      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikers": 28, "durationHours": 3.5 },
+      { "date": "2026-03-24", "memberName": "Sarah Mitchell & Diane Waller", "hikers": 18, "durationHours": 5 }
+    ],
+    "126": [
+      { "date": "2026-03-29", "memberName": "Marcus Tran", "hikers": 22, "durationHours": 3 },
+      { "date": "2026-03-26", "memberName": "Julie Okonkwo", "hikers": 23, "durationHours": 2.5 }
+    ],
+    "318": [
+      { "date": "2026-03-30", "memberName": "Robert Schaefer", "hikers": 15, "durationHours": 4 },
+      { "date": "2026-03-28", "memberName": "Elena Vasquez", "hikers": 14, "durationHours": 3 }
+    ],
+    "171": [
+      { "date": "2026-03-28", "memberName": "Dave Hutchins", "hikers": 18, "durationHours": 3 },
+      { "date": "2026-03-25", "memberName": "Sarah Mitchell", "hikers": 13, "durationHours": 2.5 }
+    ],
+    "3": [
+      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikers": 8, "durationHours": 6 },
+      { "date": "2026-03-22", "memberName": "Diane Waller", "hikers": 6, "durationHours": 5.5 }
+    ],
+    "87": [
+      { "date": "2026-03-26", "memberName": "Marcus Tran & Julie Okonkwo", "hikers": 6, "durationHours": 4 }
+    ],
+    "240": [
+      { "date": "2026-03-26", "memberName": "Robert Schaefer", "hikers": 0, "durationHours": 3.5 }
+    ],
+    "276": [
+      { "date": "2026-03-24", "memberName": "Dave Hutchins", "hikers": 0, "durationHours": 4.5 }
+    ]
+  },
 
   "violationsByCategory": [
     { "category": "Off-leash dog", "count": 11, "color": "amber" },

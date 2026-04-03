@@ -24,6 +24,7 @@ A two-tier access model makes aggregate stats publicly viewable while gating sen
 ## Key Features
 - Configurable time-range snapshots (last 7 days, month, quarter, year, all-time)
 - Switchable between organization-wide view and individual member view
+- Activity Dashboard: trail coverage follows the same time range and member scope as the rest of the page — e.g. a logged-in member selecting Me and All Time sees their full patrol history across trails
 - Headline stats: total patrols, trails covered, trees cleared, hikers contacted, parking lot vehicle counts
 - Trail patrol efficiency index: identifies under- and over-patrolled trails relative to hiker volume
 - Per-trail health detail: patrol frequency, condition history, violations, trees down, maintenance work

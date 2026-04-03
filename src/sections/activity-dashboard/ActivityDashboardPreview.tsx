@@ -7,6 +7,7 @@ import type {
   MemberContext,
   TreesCleared,
   MemberAgeGroup,
+  CoveragePatrolRow,
 } from '@/../product/sections/activity-dashboard/types'
 
 const PERIOD_LABELS: Record<string, string> = {
@@ -45,10 +46,12 @@ export default function ActivityDashboardPreview() {
       treesCleared={data.treesCleared as unknown as TreesCleared}
       membersByAge={data.membersByAge as MemberAgeGroup[]}
       members={data.members}
+      patrolsByTrailId={data.patrolsByTrailId as Record<number, CoveragePatrolRow[]>}
       currentUserId={data.currentUserId}
       onTimeRangeChange={handleTimeRangeChange}
       onMemberChange={handleMemberChange}
       onTrailSelect={(id) => console.log('Trail selected:', id)}
+      onTrailCoverageBack={() => console.log('Back from trail coverage detail')}
       onTrailCoverageSortChange={(key, dir) => console.log('Sort:', key, dir)}
     />
   )

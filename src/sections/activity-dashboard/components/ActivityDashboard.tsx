@@ -20,6 +20,7 @@ import { TrailCoverageList } from './TrailCoverageList'
 import { ViolationsChart } from './ViolationsChart'
 import { TreesClearedChart } from './TreesClearedChart'
 import { MembersByAgeChart } from './MembersByAgeChart'
+import { TrailCoveragePatrolDetail } from './TrailCoveragePatrolDetail'
 
 // ─── Time range config ──────────────────────────────────────────────────────
 
@@ -244,12 +245,56 @@ export function ActivityDashboard({
   treesCleared,
   membersByAge,
   members,
+  patrolsByTrailId,
   currentUserId,
   onTimeRangeChange,
   onMemberChange,
   onTrailSelect,
+  onTrailCoverageBack,
   onTrailCoverageSortChange,
 }: ActivityDashboardProps) {
+  const [selectedTrailId, setSelectedTrailId] = useState<number | null>(null)
+
+  useEffect(() => {
+    setSelectedTrailId(null)
+  }, [scope.timeRange, scope.memberContext])
+
+  useEffect(() => {
+    if (selectedTrailId !== null && !trailCoverage.some(t => t.trailId === selectedTrailId)) {
+      setSelectedTrailId(null)
+    }
+  }, [trailCoverage, selectedTrailId])
+
+  const selectedTrail =
+    selectedTrailId != null ? trailCoverage.find(t => t.trailId === selectedTrailId) ?? null : null
+
+  const handleTrailRowSelect = (trailId: number) => {
+    setSelectedTrailId(trailId)
+    onTrailSelect?.(trailId)
+  }
+
+  const handleTrailCoverageBack = () => {
+    setSelectedTrailId(null)
+    onTrailCoverageBack?.()
+  }
+
+  if (selectedTrailId != null && selectedTrail) {
+    const patrols = patrolsByTrailId[selectedTrailId] ?? []
+    const memberScopeLabel =
+      scope.memberContext === 'all'
+        ? 'All members'
+        : members.find(m => m.personId === scope.memberContext)?.fullName ?? 'Selected member'
+    return (
+      <TrailCoveragePatrolDetail
+        trail={selectedTrail}
+        patrols={patrols}
+        periodLabel={summary.periodLabel}
+        memberScopeLabel={memberScopeLabel}
+        onBack={handleTrailCoverageBack}
+      />
+    )
+  }
+
   return (
     <div className="min-h-full bg-stone-50 dark:bg-stone-950 p-4 md:p-6 lg:p-8">
 
@@ -331,17 +376,23 @@ export function ActivityDashboard({
         <PatrolActivityChart data={patrolActivity} />
       </ChartCard>
 
-      {/* ── Trees Cleared + Members by Age ────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+      {/* ── Trees Cleared + Members by Age (age chart org-wide only) ───────── */}
+      <div
+        className={`grid grid-cols-1 gap-4 mb-4 ${
+          scope.memberContext === 'all' ? 'lg:grid-cols-2' : ''
+        }`}
+      >
         <ChartCard title="Trees Cleared by Size Class">
           <TreesClearedChart data={treesCleared} />
         </ChartCard>
-        <ChartCard title="Members by Age">
-          <MembersByAgeChart
-            data={membersByAge}
-            activeLabel={ACTIVE_LABEL[scope.timeRange]}
-          />
-        </ChartCard>
+        {scope.memberContext === 'all' && (
+          <ChartCard title="Members by Age">
+            <MembersByAgeChart
+              data={membersByAge}
+              activeLabel={ACTIVE_LABEL[scope.timeRange]}
+            />
+          </ChartCard>
+        )}
       </div>
 
       {/* ── Two-column: Trail Coverage + Violations ────────────────── */}
@@ -349,7 +400,7 @@ export function ActivityDashboard({
         <ChartCard title="Trail Coverage" className="lg:col-span-3">
           <TrailCoverageList
             data={trailCoverage}
-            onTrailSelect={onTrailSelect}
+            onTrailSelect={handleTrailRowSelect}
             onSortChange={onTrailCoverageSortChange}
           />
         </ChartCard>

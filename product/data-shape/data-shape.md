@@ -29,6 +29,12 @@ A record of trail maintenance or clearing work performed during a patrol. Typed 
 ### Schedule
 A planned patrol event — a member or group committed to patrol a specific trail on a specific date. Links to the resulting PatrolReport once submitted. Used to track scheduled vs. completed coverage.
 
+## Activity Dashboard scope (Trail coverage)
+
+**Trail coverage** on the Activity Dashboard is driven by the same **scope** as the rest of the page: **time range** and **member** together. Changing either control refilters which patrols (and thus which trails) count. For example, a logged-in member who selects **Me** and **All Time** sees the full history of **their** patrols across trails — not only a recent window or org-wide totals.
+
+The **trail coverage drill-down** (patrol list for one trail) applies the same two-part scope: the listed patrols are only those that fall in the selected **time range** and involve the selected **member(s)** (org-wide, self only, or another member).
+
 ## Relationships
 
 - Member has many PatrolReports (through report_member join)

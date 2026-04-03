@@ -54,6 +54,14 @@ export interface TrailCoverageRow {
 
 export type TrailCoverageSortKey = 'trailName' | 'patrols' | 'hikersContacted' | 'area'
 
+/** A single patrol row for the trail coverage drill-down (scoped to the dashboard time range and member). */
+export interface CoveragePatrolRow {
+  date: string // ISO 8601 date (YYYY-MM-DD)
+  memberName: string
+  hikers: number
+  durationHours: number
+}
+
 // ─── Violations ───────────────────────────────────────────────────────────────
 
 export interface ViolationCategory {
@@ -113,7 +121,14 @@ export interface ActivityDashboardProps {
   violationsByCategory: ViolationCategory[]
   treesCleared: TreesCleared
   members: MemberOption[]
+  /** Cohort histogram; UI shows this only when `scope.memberContext` is `'all'`. */
   membersByAge: MemberAgeGroup[]
+
+  /**
+   * Patrol rows keyed by trail ID for the trail coverage detail view.
+   * Must match the current dashboard scope (time range + member); implementation supplies filtered data when scope changes.
+   */
+  patrolsByTrailId: Record<number, CoveragePatrolRow[]>
 
   /** PersonID of the logged-in user; enables the "Me" shortcut in the member selector. Omit for public/unauthenticated view. */
   currentUserId?: number
@@ -124,9 +139,25 @@ export interface ActivityDashboardProps {
   /** Called when the user selects a member from the dropdown (or 'all' for org-wide) */
   onMemberChange?: (context: MemberContext) => void
 
-  /** Called when the user clicks a trail row in the coverage list */
+  /** Called when the user opens a trail from coverage (after internal navigation to the patrol list). */
   onTrailSelect?: (trailId: number) => void
+
+  /** Called when the user leaves the trail coverage patrol list (back to the dashboard). */
+  onTrailCoverageBack?: () => void
 
   /** Called when the trail coverage table sort column or direction changes */
   onTrailCoverageSortChange?: (key: TrailCoverageSortKey, direction: 'asc' | 'desc') => void
+}
+
+// ─── Trail coverage → patrol list (detail screen) ─────────────────────────────
+
+export interface TrailCoveragePatrolDetailProps {
+  trail: TrailCoverageRow
+  /** Patrols for this trail within the active dashboard scope (same time range and member filter as the dashboard). */
+  patrols: CoveragePatrolRow[]
+  /** Time range label (matches KPI summary). */
+  periodLabel: string
+  /** Member scope label, e.g. "All members" or a person’s name when Me / other member is selected. */
+  memberScopeLabel: string
+  onBack: () => void
 }

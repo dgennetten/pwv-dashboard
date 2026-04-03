@@ -59,6 +59,8 @@ Identify what views are needed based on the spec. Common patterns:
 - Detail view (showing a single item)
 - Form/create view (for adding/editing)
 
+**Activity Dashboard — Trail Coverage (two related surfaces):** If `spec.md` describes trail coverage and drilling into a trail, the section needs **both** (1) the main dashboard (including the `TrailCoverageList` table) and (2) a **detail view** that lists **patrols for one trail** within the **same scope as the dashboard** — **time range** and **member(s)** (All members, Me, or another selected member). Implement this as a separate exportable component (e.g. `TrailCoveragePatrolDetail`) with props for the selected trail row, `patrols` for that trail, **period/time-range label**, **member scope label**, and `onBack`. Data for patrol lines should be modeled in `types.ts` (e.g. `CoveragePatrolRow`, `patrolsByTrailId` keyed by trail id) and sample rows in `data.json`. The parent `ActivityDashboard` composes list + detail (or equivalent) and uses callbacks such as `onTrailSelect` / `onTrailCoverageBack` per `types.ts` — do not omit the detail view if the spec requires row drill-down comparable to the Trails section.
+
 ## Step 4: Clarify the Screen Design Scope
 
 If the spec implies multiple views, use the AskUserQuestion tool to confirm which view to build first:
@@ -298,6 +300,7 @@ If the spec indicates additional views are needed:
 
 ## Important Notes
 
+- For **Activity Dashboard**, when the spec includes **Trail coverage → patrol list**, ensure both the **coverage table** and the **patrol detail** screen design exist; the detail view must reflect **scoped** patrols (time range + member), not unscoped history unless the spec says otherwise.
 - ALWAYS read the `frontend-design` skill before creating screen designs
 - Components MUST be props-based - never import data.json in exportable components
 - The preview wrapper is the ONLY file that imports data.json

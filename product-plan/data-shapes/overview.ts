@@ -50,6 +50,14 @@ export interface TrailCoverageRow {
 
 export type TrailCoverageSortKey = 'trailName' | 'patrols' | 'hikersContacted' | 'area'
 
+/** Patrol line item for the trail coverage drill-down (scoped to dashboard filters). */
+export interface CoveragePatrolRow {
+  date: string
+  memberName: string
+  hikers: number
+  durationHours: number
+}
+
 /** Violation row for Activity Dashboard charts (includes display color). */
 export interface DashboardViolationCategory {
   category: string

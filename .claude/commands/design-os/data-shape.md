@@ -102,6 +102,7 @@ Review and let me know if you'd like to adjust anything. When you're ready, run 
 
 ## Important Notes
 
+- If the roadmap includes an **Activity Dashboard** with **trail coverage**, the data shape and section specs should make clear that trail coverage is filtered by **time range** and **member** together (e.g. **Me** + **All Time** = that member’s full patrol history across trails, not org-only or time-only).
 - Keep it **minimal** — entity names, descriptions, and relationships
 - Do NOT define detailed schemas, field types, or validation rules
 - Use plain language that a non-technical person could understand
