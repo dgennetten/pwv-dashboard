@@ -2,9 +2,9 @@
 
 ## Public
 
-- [ ] Trend charts render with data from `trends`
-- [ ] Leaderboard tab/section shows **blurred or locked** content; **no** member full names or ranks readable
-- [ ] UI still indicates presence of a leaderboard (tab label, structure) per design
+- [ ] Trend charts render with data from `trends` (`currentUserId` omitted)
+- [ ] **Leaderboards** tab is **disabled**; tooltip / copy explains sign-in is required; **no** leaderboard list or names render
+- [ ] **Trends** tab remains fully interactive
 
 ## Authenticated
 
@@ -15,10 +15,11 @@
 
 ## Trends
 
-- [ ] Patrol activity by week chart receives `patrolActivityByWeek`
-- [ ] Violation multi-series chart uses `violationsByMonth`
-- [ ] Trees-by-size stacked data uses `treesBySizeByMonth`
-- [ ] Seasonal and year-over-year charts render without error when data present
+- [ ] **This Year** / **Year over Year** dropdown is to the left of the four chart-type pills; **All Time** grays it out and keeps “This Year” behavior
+- [ ] Period line under the chart title reflects page `timeRange` and dropdown (YTD vs YoY copy)
+- [ ] Patrol Activity: **This Year** uses `patrolActivityByWeek`; **Year over Year** uses `yearOverYear`
+- [ ] Violations / Trees / Seasonal: **This Year** uses monthly (stacked for trees); **Year over Year** shows paired monthly bars when enabled
+- [ ] Trees: YoY note clarifies totals vs size breakdown in This Year view
 
 ## Edge cases
 

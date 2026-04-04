@@ -1,5 +1,8 @@
 export type TimeRange = 'week' | 'month' | 'quarter' | 'year' | 'all';
 
+/** Trends tab: current-period view vs year-over-year (dropdown disabled when page time range is All Time). */
+export type TrendYearComparison = 'thisYear' | 'yearOverYear';
+
 /** Top-level leaderboard grouping; each maps to its own row of metric tabs. */
 export type LeaderboardCategory = 'days' | 'work' | 'trails' | 'hours';
 
@@ -96,8 +99,11 @@ export interface Trends {
 export interface LeaderboardsTrendsProps {
   members: Member[];
   trends: Trends;
-  /** The ID of the currently logged-in member, used to highlight/pin their row. */
-  currentUserId: string;
+  /**
+   * Logged-in member id for highlight/pin on the leaderboard. **Omit when the user is not authenticated**
+   * — Leaderboards are unavailable (tab disabled); Trends remain fully usable.
+   */
+  currentUserId?: string;
   defaultTimeRange?: TimeRange;
   /**
    * Initial leaderboard category when the user has no saved preference (e.g. first visit).
@@ -112,4 +118,6 @@ export interface LeaderboardsTrendsProps {
   onLeaderboardCategoryChange?: (category: LeaderboardCategory) => void;
   /** Called when the user switches the active metric tab within the category. */
   onMetricChange?: (metric: LeaderboardMetric) => void;
+  /** When the user is not logged in, optional handler for the **Sign in** control on the leaderboard gate. */
+  onSignInPrompt?: () => void;
 }

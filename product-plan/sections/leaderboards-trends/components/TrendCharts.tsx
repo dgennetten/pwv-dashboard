@@ -1,5 +1,10 @@
-import { useState } from 'react'
-import type { Trends, YearOverYearPoint } from '../types'
+import { useState, useEffect, useMemo } from 'react'
+import type {
+  Trends,
+  YearOverYearPoint,
+  TimeRange,
+  TrendYearComparison,
+} from '../types'
 
 const CHART_HEIGHT = 140
 
@@ -161,7 +166,6 @@ function YearOverYearChart({ data }: { data: YearOverYearPoint[] }) {
           </div>
         ))}
       </div>
-      {/* Legend */}
       <div className="flex items-center gap-4 pt-1">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-2 bg-stone-200 dark:bg-stone-700 rounded-sm" />
@@ -176,24 +180,55 @@ function YearOverYearChart({ data }: { data: YearOverYearPoint[] }) {
   )
 }
 
+// ── Period label (matches page time range + YoY mode) ───────────────────────
+
+function getTrendDisplayPeriod(timeRange: TimeRange, yearMode: TrendYearComparison): string {
+  const y = new Date().getFullYear()
+  if (timeRange === 'all') {
+    return 'Full history — all periods in the dataset'
+  }
+  if (yearMode === 'yearOverYear') {
+    return `Year-over-year: ${y - 1} vs ${y} (by month)`
+  }
+  switch (timeRange) {
+    case 'week':
+      return `Week to date (${y})`
+    case 'month':
+      return `Month to date (${y})`
+    case 'quarter':
+      return `Quarter to date (${y})`
+    case 'year':
+      return `Year to date — Jan 1 through present (${y})`
+    default:
+      return `Selected range (${y})`
+  }
+}
+
+/** Preview-only paired series when API does not yet supply YoY per metric (violations, trees, seasonal). */
+function synthesizeYoYFromMonthlySeries(points: { label: string; value: number }[]): YearOverYearPoint[] {
+  return points.map(p => ({
+    month: p.label,
+    previousYear: Math.max(0, Math.round(p.value * 0.88)),
+    currentYear: p.value,
+  }))
+}
+
 // ── Chart selector + card wrapper ─────────────────────────────────────────────
 
-type ChartType = 'patrolActivity' | 'violations' | 'treesBySize' | 'seasonal' | 'yearOverYear'
+type ChartType = 'patrolActivity' | 'violations' | 'treesBySize' | 'seasonal'
 
 const CHART_OPTIONS: { value: ChartType; label: string }[] = [
   { value: 'patrolActivity', label: 'Patrol Activity' },
   { value: 'violations',     label: 'Violations' },
   { value: 'treesBySize',    label: 'Trees by Size' },
   { value: 'seasonal',       label: 'Seasonal' },
-  { value: 'yearOverYear',   label: 'Year over Year' },
 ]
 
 const CHART_META: Record<ChartType, { title: string; subtitle: string }> = {
-  patrolActivity: { title: 'Patrol Activity',           subtitle: 'Weekly patrols across the organization' },
+  patrolActivity: { title: 'Patrol Activity',           subtitle: 'Patrol volume across the organization' },
   violations:     { title: 'Violations by Month',       subtitle: 'Total violations recorded org-wide' },
   treesBySize:    { title: 'Trees Cleared by Size',     subtitle: 'Monthly trees cleared by diameter class' },
   seasonal:       { title: 'Seasonal Trail Usage',      subtitle: 'Patrol volume by calendar month' },
-  yearOverYear:   { title: 'Year over Year',            subtitle: 'Current vs. prior year patrol volume' },
 }
 
 const TREES_SIZE_LEGEND = [
@@ -204,10 +239,28 @@ const TREES_SIZE_LEGEND = [
   { color: 'bg-stone-700 dark:bg-stone-300',     label: '> 36"' },
 ]
 
+const YEAR_MODE_OPTIONS: { value: TrendYearComparison; label: string }[] = [
+  { value: 'thisYear',      label: 'This Year' },
+  { value: 'yearOverYear',  label: 'Year over Year' },
+]
+
 // ── TrendCharts ───────────────────────────────────────────────────────────────
 
-export function TrendCharts({ trends }: { trends: Trends }) {
+export interface TrendChartsProps {
+  trends: Trends
+  /** Page-level time range; **All Time** disables the year-comparison dropdown. */
+  timeRange: TimeRange
+}
+
+export function TrendCharts({ trends, timeRange }: TrendChartsProps) {
   const [activeChart, setActiveChart] = useState<ChartType>('patrolActivity')
+  const [yearMode, setYearMode] = useState<TrendYearComparison>('thisYear')
+
+  const comparisonDisabled = timeRange === 'all'
+
+  useEffect(() => {
+    if (comparisonDisabled) setYearMode('thisYear')
+  }, [comparisonDisabled])
 
   const patrolData = trends.patrolActivityByWeek.map(d => ({ label: d.label, value: d.count }))
   const violationData = trends.violationsByMonth.map(d => ({
@@ -226,27 +279,90 @@ export function TrendCharts({ trends }: { trends: Trends }) {
     ],
   }))
 
+  const violationYoY = useMemo(
+    () =>
+      synthesizeYoYFromMonthlySeries(
+        trends.violationsByMonth.map(d => ({
+          label: d.month,
+          value: d.offLeashDog + d.campfire + d.nonDesignatedCamping + d.other,
+        }))
+      ),
+    [trends.violationsByMonth]
+  )
+
+  const seasonalYoY = useMemo(
+    () =>
+      synthesizeYoYFromMonthlySeries(
+        trends.seasonalPatrolsByMonth.map(d => ({ label: d.month, value: d.patrols }))
+      ),
+    [trends.seasonalPatrolsByMonth]
+  )
+
+  const treesYoY = useMemo(
+    () =>
+      synthesizeYoYFromMonthlySeries(
+        trends.treesBySizeByMonth.map(d => ({
+          label: d.month,
+          value:
+            d.under8in +
+            d.eightTo15in +
+            d.sixteenTo23in +
+            d.twentyFourTo36in +
+            d.over36in,
+        }))
+      ),
+    [trends.treesBySizeByMonth]
+  )
+
   const weeklyLabelEvery = Math.ceil(patrolData.length / 12)
   const meta = CHART_META[activeChart]
+  const displayPeriod = getTrendDisplayPeriod(timeRange, yearMode)
+  const showYoY = yearMode === 'yearOverYear' && !comparisonDisabled
 
   return (
     <div className="space-y-4">
 
-      {/* Chart selector pills */}
-      <div className="flex flex-wrap gap-2">
-        {CHART_OPTIONS.map(opt => (
-          <button
-            key={opt.value}
-            onClick={() => setActiveChart(opt.value)}
-            className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
-              activeChart === opt.value
-                ? 'bg-emerald-600 border-emerald-600 text-white'
-                : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:border-stone-300 dark:hover:border-stone-600 hover:text-stone-700 dark:hover:text-stone-200'
+      {/* Year comparison + chart type pills */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
+          <label htmlFor="trend-year-mode" className="sr-only">
+            Trend year comparison
+          </label>
+          <select
+            id="trend-year-mode"
+            value={yearMode}
+            disabled={comparisonDisabled}
+            onChange={e => setYearMode(e.target.value as TrendYearComparison)}
+            className={`text-xs font-medium rounded-full border px-3 py-1.5 pr-8 outline-none transition-colors ${
+              comparisonDisabled
+                ? 'border-stone-200 dark:border-stone-700 bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-500 cursor-not-allowed'
+                : 'border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-200 focus:border-emerald-400 dark:focus:border-emerald-600 cursor-pointer'
             }`}
           >
-            {opt.label}
-          </button>
-        ))}
+            {YEAR_MODE_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {CHART_OPTIONS.map(opt => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setActiveChart(opt.value)}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
+                activeChart === opt.value
+                  ? 'bg-emerald-600 border-emerald-600 text-white'
+                  : 'border-stone-200 dark:border-stone-700 text-stone-500 dark:text-stone-400 hover:border-stone-300 dark:hover:border-stone-600 hover:text-stone-700 dark:hover:text-stone-200'
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Active chart card */}
@@ -256,15 +372,26 @@ export function TrendCharts({ trends }: { trends: Trends }) {
             {meta.title}
           </h3>
           <p className="text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">{meta.subtitle}</p>
+          <p className="text-[11px] font-medium text-stone-600 dark:text-stone-300 mt-1.5 tabular-nums">
+            {displayPeriod}
+          </p>
         </div>
 
-        {activeChart === 'patrolActivity' && (
+        {activeChart === 'patrolActivity' && !showYoY && (
           <BarChart data={patrolData} barClass="bg-emerald-500 dark:bg-emerald-500" labelEvery={weeklyLabelEvery} />
         )}
-        {activeChart === 'violations' && (
+        {activeChart === 'patrolActivity' && showYoY && (
+          <YearOverYearChart data={trends.yearOverYear} />
+        )}
+
+        {activeChart === 'violations' && !showYoY && (
           <BarChart data={violationData} barClass="bg-amber-400 dark:bg-amber-500" />
         )}
-        {activeChart === 'treesBySize' && (
+        {activeChart === 'violations' && showYoY && (
+          <YearOverYearChart data={violationYoY} />
+        )}
+
+        {activeChart === 'treesBySize' && !showYoY && (
           <>
             <StackedBarChart data={treesSizeData} />
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3">
@@ -277,11 +404,20 @@ export function TrendCharts({ trends }: { trends: Trends }) {
             </div>
           </>
         )}
-        {activeChart === 'seasonal' && (
+        {activeChart === 'treesBySize' && showYoY && (
+          <>
+            <YearOverYearChart data={treesYoY} />
+            <p className="text-[10px] text-stone-400 dark:text-stone-500 mt-2">
+              Year-over-year shows total trees cleared per month; size breakdown applies in “This Year” view.
+            </p>
+          </>
+        )}
+
+        {activeChart === 'seasonal' && !showYoY && (
           <BarChart data={seasonalData} barClass="bg-stone-400 dark:bg-stone-500" />
         )}
-        {activeChart === 'yearOverYear' && (
-          <YearOverYearChart data={trends.yearOverYear} />
+        {activeChart === 'seasonal' && showYoY && (
+          <YearOverYearChart data={seasonalYoY} />
         )}
       </div>
     </div>

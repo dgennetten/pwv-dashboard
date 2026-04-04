@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { ArrowLeft, Leaf, AlertTriangle, Footprints, PersonStanding, Lock } from 'lucide-react'
 import type { Trail, Difficulty, TreeSizeBreakdown } from '@/../product/sections/trails/types'
 
@@ -293,40 +294,49 @@ function MaintenanceSection({ work }: { work: Trail['maintenanceWork'] }) {
   )
 }
 
-// ── Auth gate overlay ─────────────────────────────────────────────────────────
+// ── Auth gate (blur + overlay — matches leaderboards pattern) ───────────────
 
-function AuthGate({ onSignIn }: { onSignIn?: () => void }) {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center z-10 rounded-xl">
-      <button
-        onClick={onSignIn}
-        className="flex flex-col items-center gap-2 px-5 py-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-700 rounded-xl shadow-md hover:border-emerald-400 dark:hover:border-emerald-600 transition-colors group"
-      >
-        <Lock className="w-5 h-5 text-stone-400 dark:text-stone-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors" />
-        <span className="text-xs font-semibold text-stone-600 dark:text-stone-400 group-hover:text-emerald-700 dark:group-hover:text-emerald-300 transition-colors">
-          Sign in to view
-        </span>
-      </button>
-    </div>
-  )
-}
-
-function GatedSection({
-  isAuthenticated,
-  onSignInPrompt,
+function SignInBlurGate({
   children,
+  onSignIn,
+  title,
+  description,
 }: {
-  isAuthenticated: boolean
-  onSignInPrompt?: () => void
-  children: React.ReactNode
+  children: ReactNode
+  onSignIn?: () => void
+  title: string
+  description: string
 }) {
-  if (isAuthenticated) return <>{children}</>
   return (
-    <div className="relative">
-      <div className="select-none pointer-events-none blur-sm opacity-40">
+    <div className="relative rounded-xl overflow-hidden">
+      <div className="select-none pointer-events-none blur-sm opacity-[0.42] dark:opacity-35">
         {children}
       </div>
-      <AuthGate onSignIn={onSignInPrompt} />
+      <div
+        className="absolute inset-0 z-10 flex items-center justify-center p-6 sm:p-8 min-h-[220px] rounded-xl bg-white/75 dark:bg-stone-950/80 backdrop-blur-sm"
+        aria-live="polite"
+      >
+        <div className="max-w-md text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+            <Lock className="w-5 h-5 text-stone-500 dark:text-stone-400" strokeWidth={1.75} />
+          </div>
+          <p className="text-sm font-semibold text-stone-800 dark:text-stone-100 leading-snug px-2">
+            {title}
+          </p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed px-2">
+            {description}
+          </p>
+          {onSignIn && (
+            <button
+              type="button"
+              onClick={onSignIn}
+              className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white shadow-sm transition-colors"
+            >
+              Sign in
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
@@ -344,18 +354,20 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
   const totalTreesDown = SIZE_KEYS.reduce((sum, k) => sum + trail.treesDown[k], 0)
   const totalTreesCleared = SIZE_KEYS.reduce((sum, k) => sum + trail.treesCleared[k], 0)
 
-  return (
-    <div className="min-h-full bg-stone-50 dark:bg-stone-950 p-4 md:p-6 lg:p-8">
+  const patrolHistoryBlock = isAuthenticated ? (
+    <PatrolHistorySection history={trail.patrolHistory} />
+  ) : (
+    <SignInBlurGate
+      onSignIn={onSignInPrompt}
+      title="To view patrol history you must be logged in."
+      description="Sign in to see dated patrol entries and notes for this trail."
+    >
+      <PatrolHistorySection history={trail.patrolHistory} />
+    </SignInBlurGate>
+  )
 
-      {/* Back button */}
-      <button
-        onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-colors mb-5 group"
-      >
-        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-        Trails
-      </button>
-
+  const detailBody = (
+    <>
       {/* Trail header */}
       <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl p-4 mb-4">
         <div className="flex items-start justify-between gap-3 flex-wrap">
@@ -442,18 +454,9 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
         </div>
       )}
 
-      {/* Two-column grid for patrol + violations — gated for public users */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-4">
-        <div className="lg:col-span-3">
-          <GatedSection isAuthenticated={isAuthenticated} onSignInPrompt={onSignInPrompt}>
-            <PatrolHistorySection history={trail.patrolHistory} />
-          </GatedSection>
-        </div>
-        <div className="lg:col-span-2">
-          <GatedSection isAuthenticated={isAuthenticated} onSignInPrompt={onSignInPrompt}>
-            <ViolationsSection violations={trail.violationsByCategory} />
-          </GatedSection>
-        </div>
+      {/* Violations */}
+      <div className="mb-4">
+        <ViolationsSection violations={trail.violationsByCategory} />
       </div>
 
       {/* Trees detail */}
@@ -462,7 +465,28 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
       </div>
 
       {/* Maintenance work */}
-      <MaintenanceSection work={trail.maintenanceWork} />
+      <div className="mb-4">
+        <MaintenanceSection work={trail.maintenanceWork} />
+      </div>
+
+      {/* Patrol history — bottom; gated when logged out */}
+      {patrolHistoryBlock}
+    </>
+  )
+
+  return (
+    <div className="min-h-full bg-stone-50 dark:bg-stone-950 p-4 md:p-6 lg:p-8">
+      {/* Back button — always usable */}
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-sm text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 transition-colors mb-5 group"
+      >
+        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+        Trails
+      </button>
+
+      {detailBody}
     </div>
   )
 }

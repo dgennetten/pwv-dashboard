@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useState, useMemo, useCallback, useEffect, type ReactNode } from 'react'
+import { Lock } from 'lucide-react'
 import type {
   LeaderboardsTrendsProps,
   TimeRange,
@@ -121,6 +122,48 @@ function resolveInitialLeaderboardUI(
 
 type ActiveView = 'leaderboards' | 'trends'
 
+/** Blurred leaderboard preview + sign-in message (public users). */
+function LeaderboardSignInGate({
+  children,
+  onSignIn,
+}: {
+  children: ReactNode
+  onSignIn?: () => void
+}) {
+  return (
+    <div className="relative rounded-xl overflow-hidden">
+      <div className="select-none pointer-events-none blur-sm opacity-[0.42] dark:opacity-35">
+        {children}
+      </div>
+      <div
+        className="absolute inset-0 z-10 flex items-center justify-center p-6 sm:p-8 rounded-xl bg-white/75 dark:bg-stone-950/80 backdrop-blur-sm"
+        aria-live="polite"
+      >
+        <div className="max-w-md text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
+            <Lock className="w-5 h-5 text-stone-500 dark:text-stone-400" strokeWidth={1.75} />
+          </div>
+          <p className="text-sm font-semibold text-stone-800 dark:text-stone-100 leading-snug px-2">
+            To view the leaderboard you must be logged in.
+          </p>
+          <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed px-2">
+            Sign in to see rankings, names, and your place on the podium.
+          </p>
+          {onSignIn && (
+            <button
+              type="button"
+              onClick={onSignIn}
+              className="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-500 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white shadow-sm transition-colors"
+            >
+              Sign in
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ── Main component ───────────────────────────────────────────────────────────
 
 export function LeaderboardsTrends({
@@ -133,8 +176,12 @@ export function LeaderboardsTrends({
   onTimeRangeChange,
   onLeaderboardCategoryChange,
   onMetricChange,
+  onSignInPrompt,
 }: LeaderboardsTrendsProps) {
-  const [view, setView] = useState<ActiveView>('leaderboards')
+  const isAuthenticated =
+    currentUserId !== undefined && currentUserId !== null && String(currentUserId).trim() !== ''
+
+  const [view, setView] = useState<ActiveView>(() => (isAuthenticated ? 'leaderboards' : 'trends'))
   const [timeRange, setTimeRange] = useState<TimeRange>(defaultTimeRange)
   const [leaderboardCategory, setLeaderboardCategory] = useState<LeaderboardCategory>(() =>
     resolveInitialLeaderboardUI(defaultLeaderboardCategory, defaultMetric).category
@@ -205,27 +252,30 @@ export function LeaderboardsTrends({
 
       {/* View tabs */}
       <div className="flex gap-0 border-b border-stone-200 dark:border-stone-800 mb-6">
-        {(['leaderboards', 'trends'] as ActiveView[]).map(v => (
-          <button
-            key={v}
-            type="button"
-            onClick={() => setView(v)}
-            className={`px-5 py-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors capitalize ${
-              view === v
-                ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400'
-                : 'border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200'
-            }`}
-          >
-            {v === 'leaderboards' ? 'Leaderboards' : 'Trends'}
-          </button>
-        ))}
+        {(['leaderboards', 'trends'] as ActiveView[]).map(v => {
+          const isLeaderboardsTab = v === 'leaderboards'
+          return (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              className={`px-5 py-2.5 text-sm font-semibold border-b-2 -mb-px transition-colors capitalize ${
+                view === v
+                  ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400'
+                  : 'border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200'
+              }`}
+            >
+              {isLeaderboardsTab ? 'Leaderboards' : 'Trends'}
+            </button>
+          )
+        })}
       </div>
 
       {/* Active view */}
-      {view === 'leaderboards' ? (
+      {view === 'leaderboards' && isAuthenticated && (
         <Leaderboard
           members={sortedMembers}
-          currentUserId={currentUserId}
+          currentUserId={currentUserId!}
           metric={metric}
           leaderboardCategory={leaderboardCategory}
           categoryOptions={CATEGORY_OPTIONS}
@@ -233,9 +283,22 @@ export function LeaderboardsTrends({
           onLeaderboardCategoryChange={handleCategory}
           onMetricChange={handleMetric}
         />
-      ) : (
-        <TrendCharts trends={trends} />
       )}
+      {view === 'leaderboards' && !isAuthenticated && (
+        <LeaderboardSignInGate onSignIn={onSignInPrompt}>
+          <Leaderboard
+            members={sortedMembers}
+            currentUserId={sortedMembers[0]?.id ?? ''}
+            metric={metric}
+            leaderboardCategory={leaderboardCategory}
+            categoryOptions={CATEGORY_OPTIONS}
+            metrics={categoryMetrics}
+            onLeaderboardCategoryChange={handleCategory}
+            onMetricChange={handleMetric}
+          />
+        </LeaderboardSignInGate>
+      )}
+      {view === 'trends' && <TrendCharts trends={trends} timeRange={timeRange} />}
     </div>
   )
 }

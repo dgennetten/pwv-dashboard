@@ -2,7 +2,7 @@
 
 ## Overview
 
-Single page: **leaderboards** (category dropdown: Days / Work / Trails / Hours — defaults to **Work** for first-time visitors; last category **and** metric tab are saved in `localStorage` key `pwv-leaderboards-category-metric-v1` so they stick across visits) and **org-wide trend charts** (patrol activity, violations, trees by size, seasonal, year-over-year).
+Single page: **leaderboards** (category dropdown: Days / Work / Trails / Hours — defaults to **Work** for first-time visitors; last category **and** metric tab are saved in `localStorage` key `pwv-leaderboards-category-metric-v1` so they stick across visits) and **org-wide trend charts** (This Year / Year over Year dropdown + four chart types: patrol activity, violations, trees by size, seasonal).
 
 ## User Flows
 
@@ -12,7 +12,7 @@ Single page: **leaderboards** (category dropdown: Days / Work / Trails / Hours �
 
 ## Auth
 
-- **Public:** **Trends** fully visible; **Leaderboards** tab content **blurred** (no names/ranks)
+- **Public:** **Trends** fully visible; **Leaderboards** tab **disabled** (omit `currentUserId`)
 - **Logged in:** Full leaderboards; highlight/pin `currentUserId`
 
 ## Components

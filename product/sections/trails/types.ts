@@ -59,12 +59,12 @@ export interface Trail {
 
 export interface TrailHealthProps {
   trails: Trail[];
-  /** When false/undefined, violations and patrol history are blurred with a "Sign in to view" prompt. */
+  /** When false/undefined, patrol history in trail detail is blurred with a sign-in overlay; other detail sections stay visible. */
   isAuthenticated?: boolean;
   /** Called when the user selects a trail to view its detail page. */
   onSelectTrail?: (trailId: string) => void;
   /** Called when the user navigates back from the detail view to the trail list. */
   onBackToList?: () => void;
-  /** Called when the user clicks the "Sign in to view" prompt on gated content. */
+  /** Called when the user clicks **Sign in** on the patrol-history gate overlay. */
   onSignInPrompt?: () => void;
 }

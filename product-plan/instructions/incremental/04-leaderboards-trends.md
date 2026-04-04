@@ -15,14 +15,14 @@
 
 ## Goal
 
-**Leaderboards** (category dropdown: Days / Work / Trails / Hours, metric tabs per category, podium + list, highlight current user) and **trend charts** (patrol activity, violations, trees by size, seasonal, YoY).
+**Leaderboards** (category dropdown: Days / Work / Trails / Hours, metric tabs per category, podium + list, highlight current user) and **trend charts** (This Year / Year over Year dropdown left of four chart pills; All Time grays dropdown).
 
 ## Key Functionality
 
 - Time range: week / month / quarter / year / all-time
 - Metric tabs: patrol count, hours, miles, trees, overnights, stock patrols
 - Contributors: all vs active in range
-- **Public:** trend charts visible; **leaderboard area blurred** — no names/ranks exposed
+- **Public:** trend charts visible; **Leaderboards tab disabled** (omit `currentUserId`) — no names/ranks exposed
 - **Authenticated:** full leaderboards + pin/highlight `currentUserId`
 
 ## Components

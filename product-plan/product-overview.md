@@ -12,7 +12,7 @@ A data-rich analytics dashboard for Poudre Wilderness Volunteers (PWV) members. 
 
 2. **Trails** — Per-trail patrol coverage and condition data: efficiency score, filters by area/difficulty/wilderness, detail with patrol history, trees, violations, and maintenance work.
 
-3. **Leaderboards + Trends** — Rankings across multiple contribution metrics plus org-wide trend charts (patrol activity, violations by category, trees by size, seasonal patterns, year-over-year).
+3. **Leaderboards + Trends** — Rankings across multiple contribution metrics plus org-wide trend charts (This Year vs year-over-year mode and four chart types: patrol, violations, trees by size, seasonal).
 
 ## Product Entities
 
