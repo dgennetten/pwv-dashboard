@@ -2,12 +2,12 @@
 
 ## Overview
 
-Single page: **leaderboards** (six metrics, podium + ranked list) and **org-wide trend charts** (patrol activity, violations, trees by size, seasonal, year-over-year).
+Single page: **leaderboards** (category dropdown: Days / Work / Trails / Hours — defaults to **Work** for first-time visitors; last category **and** metric tab are saved in `localStorage` key `pwv-leaderboards-category-metric-v1` so they stick across visits) and **org-wide trend charts** (patrol activity, violations, trees by size, seasonal, year-over-year).
 
 ## User Flows
 
 - Change time range (applies to boards + trends)
-- Switch metric tab; toggle all contributors vs active in range
+- Switch category (Days / Work / Trails / Hours) and metric tab
 - Scroll to trend charts
 
 ## Auth
@@ -28,8 +28,8 @@ Single page: **leaderboards** (six metrics, podium + ranked list) and **org-wide
 | Callback | When |
 |----------|------|
 | `onTimeRangeChange` | Time preset changes |
+| `onLeaderboardCategoryChange` | Days / Work / Trails / Hours dropdown |
 | `onMetricChange` | Leaderboard metric tab changes |
-| `onContributorFilterChange` | All vs active in range |
 
 ## Data
 

@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { Member, LeaderboardMetric, ContributorFilter } from '@/../product/sections/leaderboards-trends/types'
+import type {
+  Member,
+  LeaderboardMetric,
+  LeaderboardCategory,
+} from '@/../product/sections/leaderboards-trends/types'
 
 // Show up to this many members in the ranked list (below the podium)
 const LIST_VISIBLE_N = 7
@@ -17,10 +21,11 @@ interface LeaderboardProps {
   members: Member[]           // pre-sorted descending by active metric
   currentUserId: string
   metric: LeaderboardMetric
+  leaderboardCategory: LeaderboardCategory
+  categoryOptions: { value: LeaderboardCategory; label: string }[]
   metrics: MetricConfig[]
-  contributorFilter: ContributorFilter
+  onLeaderboardCategoryChange?: (category: LeaderboardCategory) => void
   onMetricChange?: (metric: LeaderboardMetric) => void
-  onContributorFilterChange?: (filter: ContributorFilter) => void
 }
 
 // ── Podium ────────────────────────────────────────────────────────────────────
@@ -151,14 +156,15 @@ export function Leaderboard({
   members,
   currentUserId,
   metric,
+  leaderboardCategory,
+  categoryOptions,
   metrics,
-  contributorFilter,
+  onLeaderboardCategoryChange,
   onMetricChange,
-  onContributorFilterChange,
 }: LeaderboardProps) {
   const [expanded, setExpanded] = useState(false)
 
-  const activeMetric = metrics.find(m => m.value === metric)!
+  const activeMetric = metrics.find(m => m.value === metric) ?? metrics[0]!
   const top3 = members.slice(0, 3)
   const listMembers = members.slice(3)
   const visibleList = expanded ? listMembers : listMembers.slice(0, LIST_VISIBLE_N)
@@ -173,14 +179,30 @@ export function Leaderboard({
   return (
     <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl overflow-hidden mb-6">
 
-      {/* Metric tabs + contributor filter */}
-      <div className="flex items-stretch border-b border-stone-100 dark:border-stone-800 overflow-x-auto">
-        <div className="flex flex-1">
+      {/* Category dropdown + metric tabs */}
+      <div className="flex items-stretch border-b border-stone-100 dark:border-stone-800 min-w-0">
+        <div className="flex items-center px-3 py-2 border-r border-stone-100 dark:border-stone-800 shrink-0">
+          <label className="sr-only">Leaderboard category</label>
+          <select
+            value={leaderboardCategory}
+            onChange={e => onLeaderboardCategoryChange?.(e.target.value as LeaderboardCategory)}
+            className="text-xs font-semibold bg-white dark:bg-stone-900 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700 rounded-lg px-2.5 py-2 pr-8 outline-none focus:border-emerald-400 dark:focus:border-emerald-600 cursor-pointer max-w-[7.5rem] sm:max-w-none"
+          >
+            {categoryOptions.map(opt => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex flex-1 min-w-0 overflow-x-auto">
           {metrics.map(m => (
             <button
               key={m.value}
+              type="button"
               onClick={() => onMetricChange?.(m.value)}
-              className={`px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-colors ${
+              className={`px-3 sm:px-4 py-3 text-xs font-semibold whitespace-nowrap border-b-2 transition-colors shrink-0 ${
                 metric === m.value
                   ? 'border-emerald-500 text-emerald-700 dark:text-emerald-400 bg-emerald-50/50 dark:bg-emerald-950/20'
                   : 'border-transparent text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'
@@ -189,25 +211,6 @@ export function Leaderboard({
               {m.label}
             </button>
           ))}
-        </div>
-
-        {/* Contributor filter toggle */}
-        <div className="flex items-center px-3 border-l border-stone-100 dark:border-stone-800 shrink-0">
-          <div className="flex bg-stone-100 dark:bg-stone-800 rounded-md p-0.5 gap-0.5">
-            {([['all', 'All'], ['activeInRange', 'Active']] as [ContributorFilter, string][]).map(([val, lbl]) => (
-              <button
-                key={val}
-                onClick={() => onContributorFilterChange?.(val)}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded transition-colors ${
-                  contributorFilter === val
-                    ? 'bg-white dark:bg-stone-700 text-stone-800 dark:text-stone-100 shadow-sm'
-                    : 'text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300'
-                }`}
-              >
-                {lbl}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -238,6 +241,7 @@ export function Leaderboard({
       {/* Expand / collapse */}
       {hasMore && (
         <button
+          type="button"
           onClick={() => setExpanded(prev => !prev)}
           className="w-full flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 border-t border-stone-100 dark:border-stone-800 transition-colors"
         >

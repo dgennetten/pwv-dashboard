@@ -11,7 +11,6 @@
 - [ ] Leaderboard shows podium for top 3 and list for rank 4+
 - [ ] Metric tabs switch active metric and `onMetricChange` fires with correct key
 - [ ] Time range control updates both boards and charts (`onTimeRangeChange`)
-- [ ] **All contributors** vs **Active in range** toggle calls `onContributorFilterChange`
 - [ ] Current user row is visually distinct or pinned when `currentUserId` is not in top 3
 
 ## Trends

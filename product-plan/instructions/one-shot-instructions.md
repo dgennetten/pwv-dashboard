@@ -218,7 +218,7 @@ See `types.ts` for full definitions.
 
 ## Goal
 
-**Leaderboards** (six metrics, podium + list, highlight current user) and **trend charts** (patrol activity, violations, trees by size, seasonal, YoY).
+**Leaderboards** (category dropdown: Days / Work / Trails / Hours, metric tabs per category, podium + list, highlight current user) and **trend charts** (patrol activity, violations, trees by size, seasonal, YoY).
 
 ## Key Functionality
 
@@ -237,7 +237,7 @@ See `types.ts` for full definitions.
 
 **Data:** `members`, `trends`, `currentUserId`, optional defaults
 
-**Callbacks:** `onTimeRangeChange`, `onMetricChange`, `onContributorFilterChange`
+**Callbacks:** `onTimeRangeChange`, `onLeaderboardCategoryChange`, `onMetricChange`
 
 ## Files to Reference
 

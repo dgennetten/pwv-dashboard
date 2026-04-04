@@ -1,25 +1,50 @@
 export type TimeRange = 'week' | 'month' | 'quarter' | 'year' | 'all';
 
-export type LeaderboardMetric =
-  | 'patrolCount'
-  | 'volunteerHours'
-  | 'milesCovered'
-  | 'treesCleared'
-  | 'overnights'
-  | 'stockPatrols';
+/** Top-level leaderboard grouping; each maps to its own row of metric tabs. */
+export type LeaderboardCategory = 'days' | 'work' | 'trails' | 'hours';
 
-export type ContributorFilter = 'all' | 'activeInRange';
+export type LeaderboardMetric =
+  // Days
+  | 'patrolDays'
+  | 'hikeDays'
+  | 'stockDays'
+  | 'trailworkDays'
+  | 'wildernessDays'
+  // Work
+  | 'contacts'
+  | 'treesCleared'
+  | 'brushing'
+  | 'fireRings'
+  | 'trash'
+  // Trails
+  | 'milesCovered'
+  | 'trailCount'
+  | 'trailTypes'
+  // Hours
+  | 'totalHours'
+  | 'patrolHours'
+  | 'nonPatrolHours';
 
 export interface Member {
   id: string;
   name: string;
   initials: string;
-  patrolCount: number;
-  volunteerHours: number;
-  milesCovered: number;
+  patrolDays: number;
+  hikeDays: number;
+  stockDays: number;
+  trailworkDays: number;
+  wildernessDays: number;
+  contacts: number;
   treesCleared: number;
-  overnights: number;
-  stockPatrols: number;
+  brushing: number;
+  fireRings: number;
+  trash: number;
+  milesCovered: number;
+  trailCount: number;
+  trailTypes: number;
+  totalHours: number;
+  patrolHours: number;
+  nonPatrolHours: number;
 }
 
 /** A weekly data point for the patrol activity trend chart. */
@@ -74,11 +99,17 @@ export interface LeaderboardsTrendsProps {
   /** The ID of the currently logged-in member, used to highlight/pin their row. */
   currentUserId: string;
   defaultTimeRange?: TimeRange;
+  /**
+   * Initial leaderboard category when the user has no saved preference (e.g. first visit).
+   * Component default is **Work**; persisted choice in `localStorage` wins when present.
+   */
+  defaultLeaderboardCategory?: LeaderboardCategory;
+  /** Initial metric tab when no saved preference; default pairs with Work → Contacts. */
   defaultMetric?: LeaderboardMetric;
   /** Called when the user changes the active time range. */
   onTimeRangeChange?: (range: TimeRange) => void;
-  /** Called when the user switches the active leaderboard metric. */
+  /** Called when the user switches the leaderboard category (Days / Work / …). */
+  onLeaderboardCategoryChange?: (category: LeaderboardCategory) => void;
+  /** Called when the user switches the active metric tab within the category. */
   onMetricChange?: (metric: LeaderboardMetric) => void;
-  /** Called when the user toggles between all contributors and active-in-range. */
-  onContributorFilterChange?: (filter: ContributorFilter) => void;
 }

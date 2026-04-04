@@ -168,26 +168,46 @@ export interface Trail {
 
 export type LeaderboardsTimeRange = 'week' | 'month' | 'quarter' | 'year' | 'all'
 
-export type LeaderboardMetric =
-  | 'patrolCount'
-  | 'volunteerHours'
-  | 'milesCovered'
-  | 'treesCleared'
-  | 'overnights'
-  | 'stockPatrols'
+export type LeaderboardCategory = 'days' | 'work' | 'trails' | 'hours'
 
-export type ContributorFilter = 'all' | 'activeInRange'
+export type LeaderboardMetric =
+  | 'patrolDays'
+  | 'hikeDays'
+  | 'stockDays'
+  | 'trailworkDays'
+  | 'wildernessDays'
+  | 'contacts'
+  | 'treesCleared'
+  | 'brushing'
+  | 'fireRings'
+  | 'trash'
+  | 'milesCovered'
+  | 'trailCount'
+  | 'trailTypes'
+  | 'totalHours'
+  | 'patrolHours'
+  | 'nonPatrolHours'
 
 export interface LeaderboardMember {
   id: string
   name: string
   initials: string
-  patrolCount: number
-  volunteerHours: number
-  milesCovered: number
+  patrolDays: number
+  hikeDays: number
+  stockDays: number
+  trailworkDays: number
+  wildernessDays: number
+  contacts: number
   treesCleared: number
-  overnights: number
-  stockPatrols: number
+  brushing: number
+  fireRings: number
+  trash: number
+  milesCovered: number
+  trailCount: number
+  trailTypes: number
+  totalHours: number
+  patrolHours: number
+  nonPatrolHours: number
 }
 
 export interface PatrolActivityPoint {
