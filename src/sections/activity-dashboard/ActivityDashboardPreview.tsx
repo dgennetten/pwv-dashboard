@@ -36,6 +36,7 @@ export default function ActivityDashboardPreview() {
     periodLabel: PERIOD_LABELS[scope.timeRange] ?? data.summary.periodLabel,
   }
 
+  // Small page size so the 8 sample trails exercise “Load more” in preview (prod uses admin setting / default 50).
   return (
     <ActivityDashboard
       scope={scope}
@@ -53,6 +54,7 @@ export default function ActivityDashboardPreview() {
       onTrailSelect={(id) => console.log('Trail selected:', id)}
       onTrailCoverageBack={() => console.log('Back from trail coverage detail')}
       onTrailCoverageSortChange={(key, dir) => console.log('Sort:', key, dir)}
+      trailCoveragePageSize={4}
     />
   )
 }

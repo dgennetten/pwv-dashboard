@@ -252,6 +252,7 @@ export function ActivityDashboard({
   onTrailSelect,
   onTrailCoverageBack,
   onTrailCoverageSortChange,
+  trailCoveragePageSize,
 }: ActivityDashboardProps) {
   const [selectedTrailId, setSelectedTrailId] = useState<number | null>(null)
 
@@ -395,19 +396,20 @@ export function ActivityDashboard({
         )}
       </div>
 
-      {/* ── Two-column: Trail Coverage + Violations ────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
-        <ChartCard title="Trail Coverage" className="lg:col-span-3">
-          <TrailCoverageList
+      {/* ── Violations ─────────────────────────────────────────────── */}
+      <ChartCard title="Violations by Category" className="mb-4">
+        <ViolationsChart data={violationsByCategory} />
+      </ChartCard>
+
+      {/* ── Trail Coverage (list at bottom) ─────────────────────────── */}
+      <ChartCard title="Trail Coverage">
+        <TrailCoverageList
             data={trailCoverage}
+            pageSize={trailCoveragePageSize}
             onTrailSelect={handleTrailRowSelect}
             onSortChange={onTrailCoverageSortChange}
           />
-        </ChartCard>
-        <ChartCard title="Violations by Category" className="lg:col-span-2">
-          <ViolationsChart data={violationsByCategory} />
-        </ChartCard>
-      </div>
+      </ChartCard>
 
     </div>
   )

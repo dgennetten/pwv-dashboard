@@ -133,6 +133,12 @@ export interface ActivityDashboardProps {
   /** PersonID of the logged-in user; enables the "Me" shortcut in the member selector. Omit for public/unauthenticated view. */
   currentUserId?: number
 
+  /**
+   * Trail coverage table: initial batch size and each “Load more” increment.
+   * Omit to use component default (50). Real apps should pass the value from org admin settings.
+   */
+  trailCoveragePageSize?: number
+
   /** Called when the user selects a different time range preset */
   onTimeRangeChange?: (range: TimeRange) => void
 

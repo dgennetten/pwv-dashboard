@@ -33,3 +33,4 @@ The primary view of PWV Insights. Displays a snapshot of patrol activity across 
 
 ## Configuration
 - shell: true
+- **Trail coverage page size:** Org admin setting (default 50). The trail coverage table loads this many rows at a time; after the user scrolls to the bottom of the current batch, a **Load more** control appears if additional rows exist, with copy showing how many trails are shown vs. the full filtered list total.
