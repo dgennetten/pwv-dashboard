@@ -58,6 +58,7 @@
       "inWilderness": false,
       "patrols": 3,
       "members": 4,
+      "hikersSeen": 94,
       "hikersContacted": 78,
       "lastPatrolDate": "2026-03-29"
     },
@@ -70,6 +71,7 @@
       "inWilderness": false,
       "patrols": 2,
       "members": 2,
+      "hikersSeen": 56,
       "hikersContacted": 45,
       "lastPatrolDate": "2026-03-29"
     },
@@ -82,6 +84,7 @@
       "inWilderness": false,
       "patrols": 2,
       "members": 3,
+      "hikersSeen": 36,
       "hikersContacted": 29,
       "lastPatrolDate": "2026-03-30"
     },
@@ -94,6 +97,7 @@
       "inWilderness": false,
       "patrols": 2,
       "members": 2,
+      "hikersSeen": 38,
       "hikersContacted": 31,
       "lastPatrolDate": "2026-03-28"
     },
@@ -106,6 +110,7 @@
       "inWilderness": true,
       "patrols": 2,
       "members": 3,
+      "hikersSeen": 18,
       "hikersContacted": 14,
       "lastPatrolDate": "2026-03-27"
     },
@@ -118,6 +123,7 @@
       "inWilderness": true,
       "patrols": 1,
       "members": 2,
+      "hikersSeen": 8,
       "hikersContacted": 6,
       "lastPatrolDate": "2026-03-26"
     },
@@ -130,6 +136,7 @@
       "inWilderness": true,
       "patrols": 1,
       "members": 1,
+      "hikersSeen": 2,
       "hikersContacted": 0,
       "lastPatrolDate": "2026-03-26"
     },
@@ -142,6 +149,7 @@
       "inWilderness": true,
       "patrols": 1,
       "members": 2,
+      "hikersSeen": 0,
       "hikersContacted": 0,
       "lastPatrolDate": "2026-03-24"
     }
@@ -149,34 +157,34 @@
 
   "patrolsByTrailId": {
     "117": [
-      { "date": "2026-03-29", "memberName": "Sarah Mitchell", "hikers": 32, "durationHours": 4.5 },
-      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikers": 28, "durationHours": 3.5 },
-      { "date": "2026-03-24", "memberName": "Sarah Mitchell & Diane Waller", "hikers": 18, "durationHours": 5 }
+      { "date": "2026-03-29", "memberName": "Sarah Mitchell", "hikersSeen": 39, "hikersContacted": 32, "durationHours": 4.5 },
+      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikersSeen": 34, "hikersContacted": 28, "durationHours": 3.5 },
+      { "date": "2026-03-24", "memberName": "Sarah Mitchell & Diane Waller", "hikersSeen": 21, "hikersContacted": 18, "durationHours": 5 }
     ],
     "126": [
-      { "date": "2026-03-29", "memberName": "Marcus Tran", "hikers": 22, "durationHours": 3 },
-      { "date": "2026-03-26", "memberName": "Julie Okonkwo", "hikers": 23, "durationHours": 2.5 }
+      { "date": "2026-03-29", "memberName": "Marcus Tran", "hikersSeen": 27, "hikersContacted": 22, "durationHours": 3 },
+      { "date": "2026-03-26", "memberName": "Julie Okonkwo", "hikersSeen": 29, "hikersContacted": 23, "durationHours": 2.5 }
     ],
     "318": [
-      { "date": "2026-03-30", "memberName": "Robert Schaefer", "hikers": 15, "durationHours": 4 },
-      { "date": "2026-03-28", "memberName": "Elena Vasquez", "hikers": 14, "durationHours": 3 }
+      { "date": "2026-03-30", "memberName": "Robert Schaefer", "hikersSeen": 19, "hikersContacted": 15, "durationHours": 4 },
+      { "date": "2026-03-28", "memberName": "Elena Vasquez", "hikersSeen": 17, "hikersContacted": 14, "durationHours": 3 }
     ],
     "171": [
-      { "date": "2026-03-28", "memberName": "Dave Hutchins", "hikers": 18, "durationHours": 3 },
-      { "date": "2026-03-25", "memberName": "Sarah Mitchell", "hikers": 13, "durationHours": 2.5 }
+      { "date": "2026-03-28", "memberName": "Dave Hutchins", "hikersSeen": 22, "hikersContacted": 18, "durationHours": 3 },
+      { "date": "2026-03-25", "memberName": "Sarah Mitchell", "hikersSeen": 16, "hikersContacted": 13, "durationHours": 2.5 }
     ],
     "3": [
-      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikers": 8, "durationHours": 6 },
-      { "date": "2026-03-22", "memberName": "Diane Waller", "hikers": 6, "durationHours": 5.5 }
+      { "date": "2026-03-27", "memberName": "Tom Eriksen", "hikersSeen": 10, "hikersContacted": 8, "durationHours": 6 },
+      { "date": "2026-03-22", "memberName": "Diane Waller", "hikersSeen": 8, "hikersContacted": 6, "durationHours": 5.5 }
     ],
     "87": [
-      { "date": "2026-03-26", "memberName": "Marcus Tran & Julie Okonkwo", "hikers": 6, "durationHours": 4 }
+      { "date": "2026-03-26", "memberName": "Marcus Tran & Julie Okonkwo", "hikersSeen": 8, "hikersContacted": 6, "durationHours": 4 }
     ],
     "240": [
-      { "date": "2026-03-26", "memberName": "Robert Schaefer", "hikers": 0, "durationHours": 3.5 }
+      { "date": "2026-03-26", "memberName": "Robert Schaefer", "hikersSeen": 2, "hikersContacted": 0, "durationHours": 3.5 }
     ],
     "276": [
-      { "date": "2026-03-24", "memberName": "Dave Hutchins", "hikers": 0, "durationHours": 4.5 }
+      { "date": "2026-03-24", "memberName": "Dave Hutchins", "hikersSeen": 0, "hikersContacted": 0, "durationHours": 4.5 }
     ]
   },
 
@@ -243,7 +251,8 @@
     { "ageGroup": "40–49", "active": 14, "inactive": 32 },
     { "ageGroup": "50–59", "active": 22, "inactive": 45 },
     { "ageGroup": "60–69", "active": 18, "inactive": 52 },
-    { "ageGroup": "70+",   "active": 7,  "inactive": 31 }
+    { "ageGroup": "70–79", "active": 7,  "inactive": 31 },
+    { "ageGroup": "80+",   "active": 2,  "inactive": 9  }
   ],
 
   "members": [

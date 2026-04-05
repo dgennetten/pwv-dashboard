@@ -35,7 +35,7 @@ const ACTIVE_LABEL: Record<TimeRange, string> = {
 const TIME_RANGES: { value: TimeRange; label: string }[] = [
   { value: '7d',  label: 'Last 7 Days' },
   { value: '1m',  label: 'Last Month' },
-  { value: '3m',  label: 'Last 3 Months' },
+  { value: '3m',  label: 'Season to Date' },
   { value: '1y',  label: 'Last Year' },
   { value: 'all', label: 'All Time' },
 ]
@@ -365,7 +365,7 @@ export function ActivityDashboard({
           icon={<TreePine className="w-4 h-4" strokeWidth={1.5} />}
         />
         <KpiCard
-          label="Hikers Contacted"
+          label="Contacted"
           value={summary.hikersContacted}
           delta={summary.hikersContactedDelta}
           icon={<PersonStanding className="w-4 h-4" strokeWidth={1.5} />}

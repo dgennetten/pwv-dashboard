@@ -15,7 +15,7 @@ const TIME_RANGES: { value: TimeRange; label: string }[] = [
   { value: 'week',    label: 'Week to Date' },
   { value: 'month',   label: 'Month to Date' },
   { value: 'quarter', label: 'Quarter to Date' },
-  { value: 'year',    label: 'Year to Date' },
+  { value: 'year',    label: 'Season to Date' },
   { value: 'all',     label: 'All Time' },
 ]
 

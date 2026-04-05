@@ -203,7 +203,7 @@ export function TrailList({ trails, onSelectTrail }: TrailListProps) {
         {/* Page header */}
         <div className="mb-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Trails</h2>
+            <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100">Trails <span className="font-semibold text-stone-400 dark:text-stone-500">Season to Date</span></h2>
             {underPatrolledCount > 0 && (
               <span className="flex items-center gap-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-full">
                 <AlertTriangle className="w-3 h-3" />

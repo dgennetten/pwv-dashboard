@@ -20,7 +20,8 @@ export interface TreeSizeBreakdown {
 export interface PatrolEntry {
   date: string;           // ISO date string (YYYY-MM-DD)
   memberName: string;
-  hikers: number;
+  hikersSeen: number;
+  hikersContacted: number;
   durationHours: number;
 }
 
@@ -47,6 +48,7 @@ export interface Trail {
   wilderness: boolean;
   patrolCount: number;
   patrolFrequency: number;        // patrols per month
+  hikersSeen: number;
   hikersContacted: number;
   efficiencyScore: number;        // 0–100, computed from patrol coverage vs. visitor pressure
   underPatrolled: boolean;

@@ -151,7 +151,7 @@ export function TrailCoverageList({
                   onClick={() => handleSort('hikersContacted')}
                   className="flex items-center gap-1 ml-auto text-stone-500 dark:text-stone-400 hover:text-stone-700 dark:hover:text-stone-300 uppercase tracking-wider font-semibold"
                 >
-                  Hikers <SortIcon col="hikersContacted" sort={sort} />
+                  Contacted <SortIcon col="hikersContacted" sort={sort} />
                 </button>
               </th>
             </tr>

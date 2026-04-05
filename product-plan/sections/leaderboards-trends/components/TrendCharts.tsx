@@ -198,7 +198,7 @@ function getTrendDisplayPeriod(timeRange: TimeRange, yearMode: TrendYearComparis
     case 'quarter':
       return `Quarter to date (${y})`
     case 'year':
-      return `Year to date — Jan 1 through present (${y})`
+      return `Season to Date — Oct 1 through present (2025-2026)`
     default:
       return `Selected range (${y})`
   }
@@ -221,7 +221,6 @@ const CHART_OPTIONS: { value: ChartType; label: string }[] = [
   { value: 'patrolActivity', label: 'Patrol Activity' },
   { value: 'violations',     label: 'Violations' },
   { value: 'treesBySize',    label: 'Trees by Size' },
-  { value: 'seasonal',       label: 'Seasonal' },
 ]
 
 const CHART_META: Record<ChartType, { title: string; subtitle: string }> = {

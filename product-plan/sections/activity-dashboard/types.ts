@@ -48,6 +48,7 @@ export interface TrailCoverageRow {
   inWilderness: boolean
   patrols: number
   members: number
+  hikersSeen: number
   hikersContacted: number
   lastPatrolDate: string | null  // ISO 8601 date; null if no patrols in period
 }
@@ -58,7 +59,8 @@ export type TrailCoverageSortKey = 'trailName' | 'patrols' | 'hikersContacted' |
 export interface CoveragePatrolRow {
   date: string // ISO 8601 date (YYYY-MM-DD)
   memberName: string
-  hikers: number
+  hikersSeen: number
+  hikersContacted: number
   durationHours: number
 }
 

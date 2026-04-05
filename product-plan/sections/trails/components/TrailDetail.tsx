@@ -240,9 +240,10 @@ function PatrolHistorySection({ history }: { history: Trail['patrolHistory'] }) 
                   </div>
                 </div>
               </div>
-              <span className="text-sm font-semibold tabular-nums text-stone-700 dark:text-stone-300 shrink-0 ml-3">
-                {entry.hikers} hikers
-              </span>
+              <div className="flex items-center gap-3 shrink-0 ml-3 text-sm tabular-nums">
+                <span className="text-stone-500 dark:text-stone-400">{entry.hikersSeen} seen</span>
+                <span className="font-semibold text-stone-700 dark:text-stone-300">{entry.hikersContacted} contacted</span>
+              </div>
             </div>
           ))}
         </div>
@@ -426,7 +427,7 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
+      <div className="grid grid-cols-3 gap-3 mb-4">
         <StatCard
           label="Total Patrols"
           value={trail.patrolCount}
@@ -434,7 +435,12 @@ export function TrailDetail({ trail, isAuthenticated = false, onBack, onSignInPr
           accent
         />
         <StatCard
-          label="Hikers Contacted"
+          label="Seen"
+          value={trail.hikersSeen}
+          icon={<PersonStanding className="w-4 h-4" strokeWidth={1.5} />}
+        />
+        <StatCard
+          label="Contacted"
           value={trail.hikersContacted}
           icon={<PersonStanding className="w-4 h-4" strokeWidth={1.5} />}
         />

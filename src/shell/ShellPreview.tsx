@@ -57,7 +57,7 @@ export default function ShellPreview() {
 
         {/* Placeholder stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {['Patrols', 'Trails Covered', 'Trees Cleared', 'Hikers Contacted'].map((label) => (
+          {['Patrols', 'Trails Covered', 'Trees Cleared', 'Contacted'].map((label) => (
             <div
               key={label}
               className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl p-4"
