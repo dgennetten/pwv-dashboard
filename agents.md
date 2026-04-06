@@ -4,6 +4,12 @@ Design OS is a **product planning and design tool** that helps users define thei
 
 > **Important**: Design OS is a planning tool, not the end product codebase. The screen designs and components generated here are meant to be exported and integrated into your actual product's codebase.
 
+### Secrets and credentials
+
+- **Never** commit database passwords, API keys, or connection strings. Use `.env` (already gitignored) or your shell environment.
+- **`.claude/settings.local.json`** is gitignored. It is for machine-specific Claude Code permissions only; do not paste real `mysql -p…` commands or passwords there. Copy `.claude/settings.local.example.json` as a starting point if you need a template.
+- For MySQL, prefer `mysql_config_editor` (login path), or run `mysql` interactively, rather than embedding `-p` passwords in any repo file.
+
 ---
 
 ## Understanding Design OS Context

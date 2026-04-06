@@ -18,6 +18,9 @@ dist/
 .env.local
 .env.*.local
 
+# Local / machine-only (never commit credentials or host-specific paths)
+.claude/settings.local.json
+
 # Logs
 *.log
 npm-debug.log*
