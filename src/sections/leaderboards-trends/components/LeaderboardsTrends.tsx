@@ -42,7 +42,7 @@ const METRICS_BY_CATEGORY: Record<
     { value: 'treesCleared', label: 'Trees',      unit: 'trees' },
     { value: 'brushing',     label: 'Brushing',   unit: 'hrs' },
     { value: 'fireRings',    label: 'Fire rings', unit: 'rings' },
-    { value: 'trash',        label: 'Trash',      unit: 'bags' },
+    { value: 'trash',        label: 'Trash',      unit: 'pounds' },
   ],
   trails: [
     { value: 'milesCovered', label: 'Miles',   unit: 'mi' },

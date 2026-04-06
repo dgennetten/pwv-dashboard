@@ -28,7 +28,17 @@
       "Bash(git add:*)",
       "Bash(git rm:*)",
       "Bash(npx tsc:*)",
-      "Bash(node -e \"const d = require\\(''./product/sections/trails/data.json''\\); console.log\\(''Trail count:'', d.trails.length\\)\")"
+      "Bash(node -e \"const d = require\\(''./product/sections/trails/data.json''\\); console.log\\(''Trail count:'', d.trails.length\\)\")",
+      "Bash(ls /db/)",
+      "Read(//c//**)",
+      "Read(//c/Users/dougl/**)",
+      "Read(//c/Users/dougl/Downloads/**)",
+      "Bash(mysql:*)",
+      "Bash(where mysql:*)",
+      "Read(//c/Program Files/MySQL//**)",
+      "Read(//c/Program Files/MySQL/**)",
+      "Bash($MYSQL:*)",
+      "Bash('/c/Program Files/MySQL/MySQL Server 8.4/bin/mysql.exe' -h mysql.gennetten.com -u dgennetten -ptd!stayAct1ve pwvinsights -e ':*)"
     ]
   }
 }
